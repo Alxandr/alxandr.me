@@ -9,6 +9,8 @@ install:
   - npm install -g webpack
   - npm install
   - bundler install
-script:
-  - webpack --minimize
-  - bundle exec jekyll build
+script: ./deploy.sh
+env:
+  global:
+    - ENCRYPTION_LABEL: "bb16b97d7bf0"
+    - COMMIT_AUTHOR_EMAIL: "alxandr@alxandr.me"
