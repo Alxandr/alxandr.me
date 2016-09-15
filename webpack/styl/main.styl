@@ -1,0 +1,305 @@
+/*
+ * Body resets
+ *
+ * Update the foundational and global aspects of the page.
+ */
+
+*
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+html, body
+  margin: 0
+  padding: 0
+  height: 100%
+
+body
+  font-family: "Raleway", sans-serif
+  font-size: 1em
+  color: #454441
+  background-color: #fff
+
+h1, h2, h3, h4, h5, h6
+  margin-top: .8em
+  margin-bottom: .4em
+  font-family: "Roboto Slab", serif
+  font-weight: lighter
+  -webkit-font-smoothing: antialiased
+
+h1
+  margin-top: 0
+  font-size: 3.2rem
+  line-height: 1.2em
+  letter-spacing: .05em
+
+h2
+  font-size: 2.2rem
+
+h3
+  font-size: 1.8rem
+
+h4
+  font-size: 1.4rem
+
+h5
+  font-size: 1.2rem
+
+h6
+  font-size: 1rem
+
+p
+  margin-bottom: 1.3em
+  line-height: 1.7em
+
+ul, ol
+  margin-bottom: 15px
+
+hr
+  position: relative
+  margin: 40px 0
+  border: 0
+  border-top: 1px solid #eee
+  border-bottom: 1px solid #fff
+
+strong
+  color: #222
+  font-weight: 700
+
+abbr
+  background-color: #eee
+  display: inline-block
+  padding: 3px
+  font-size: 13px
+  font-weight: bold
+  color: #555
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5)
+  text-transform: uppercase
+  border-radius: 3px
+
+code, pre
+  font-family: Menlo, Monaco, "Courier New", monospace
+
+code
+  padding: .25em .5em
+  font-size: 85%
+  color: #bf616a
+  background-color: #f9f9f9
+  border-radius: 3px
+
+pre
+  display: block
+  margin: 0 0 14px
+  padding: 15px 20px
+  font-size: 0.9rem
+  white-space: pre
+  background-color: #f9f9f9
+  overflow-x: auto
+
+  code
+    padding: 0
+    font-size: 100%
+    color: inherit
+    background-color: transparent
+
+.highlight
+  margin-bottom: 15px
+  border-radius: 4px
+
+  pre
+    margin-bottom: 0
+
+/* Quotes */
+blockquote 
+  padding: 5px 30px 5px 25px
+  margin: 15px 0
+  border-left: 5px solid #eee
+
+  p
+    margin-bottom: 0
+    color: #7a7a7a
+    text-indent: -0.4em
+
+    &:before 
+      content: '\201C'
+
+    &:after 
+      content: '\201D'
+img 
+  display: block
+  margin: 0 0 15px
+  border-radius: 5px
+
+/*
+ * Links
+ *
+ * No `:visited` state is required by default (browsers will use `a`). `:focus`
+ * is linked to `:hover` for basic accessibility.
+ */
+
+a
+  font-weight: 600
+  color: #222
+  text-decoration: none
+
+  &:hover, &:focus
+    text-decoration: underline
+
+/*
+ * Masthead & Header
+ *
+ * Magic header.
+ */
+
+/* Top image */
+.bgi
+  position: fixed
+  z-index: -1
+  width: 100%
+  height: 500px
+  background: url('../images/cover.jpg') top left no-repeat #666
+  background-size: cover
+
+  .bgi-overlay
+    background-color: rgba(12, 12, 12, 0.7)
+    width: 100%
+    height: 100%
+
+header.header
+  margin: 0
+  font-size: 2.5rem
+  letter-spacing: 4px
+  color: #fff
+  position: fixed
+  width: 100%
+  text-align: center
+  padding-top: 160px
+  transition: padding-top .2s, background-color .2s, color .2s, border-bottom .2s
+
+  h1
+    margin: 0
+    font-size: inherit
+    font-weight: 300
+    letter-spacing: 4px
+    display: inline-block
+    border-bottom: 1px solid white
+
+    > a
+      color: inherit
+      text-decoration: none
+      font-family: "Roboto Slab", serif
+      font-weight: 300
+  
+  .lead
+    margin: 0
+    font-weight: 100
+    padding-top: 10px
+    padding-bottom: 10px
+    font-size: 0.3em
+  
+  &.sticky
+    padding-top: 20px
+    background-color: white
+    color: black
+    border-bottom: 1px solid #ddd
+  
+  @media (max-width: 470px)
+    font-size: 1.5rem
+  
+
+/* Container
+ *
+ * Align the contents of the site above the proper threshold with some margin-fu
+ * with a 25%-wide `.masthead`.
+ */
+
+.content
+  padding-top: 550px
+  padding-bottom: 60px
+
+  .content-bg
+    background-color: white
+
+.container
+  max-width: 800px
+  margin: 0 auto
+
+/*
+ * Posts
+ *
+ * Each post is wrapped in `.post`. Used on default and post layouts.
+ */
+
+/* Single post */
+
+.post
+  margin-bottom: 40px
+
+  @media (min-width: 990px)
+    margin-bottom: 60px
+
+/* Meta data line below post title */
+.post-date
+  display: block
+  margin: -10px 0 10px
+  color: #9a9a9a
+
+/* Related posts */
+.related 
+  padding-top: 20px
+  padding-bottom: 40px
+  border-top: 1px solid #eee
+
+.related-posts 
+  padding-left: 0
+  list-style: none
+
+  h3 
+    margin-top: 0
+
+  li small 
+    font-size: 75%
+    color: #999
+
+    a:hover 
+      color: #000
+      text-decoration: none
+
+      small 
+        color: inherit
+
+/*
+ * Pagination
+ *
+ * Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
+ * there are no more previous or next posts to show.
+ */
+
+.pagination
+  overflow: hidden /* clearfix */
+  margin-top: 40px
+  font-weight: bold
+  color: #ccc
+  text-align: center
+  border-top: 1px solid #eee
+
+  @media (min-width: 990px)
+    margin-bottom: 60px
+    border: 1px solid #eee
+  
+  a, span
+    float: left
+    width: 50%
+    padding: 20px
+  
+  a:first-child, span:first-child
+    border-right: 1px solid #eee
+  
+  a:hover
+    text-decoration: none
+    background-color: #f5f5f5
+@require 'post-list'
+
+code
+  font-family: 'Fira Mono', consolas, monospace
+@require 'syntax'

@@ -1,0 +1,26 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html>
+  {% include head.html %}
+
+  <body>
+    <div class="bgi">
+      <div class="bgi-overlay"></div>
+    </div>
+
+    <header class="header">
+      <h1><a href="{{ site.url }}">{{ site.title }}</a></h1>
+      <p class="lead">{{ site.description }}</p>
+    </header>
+
+    <div class="content" id="content">
+      <div class="content-bg">
+        <div class="container">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
