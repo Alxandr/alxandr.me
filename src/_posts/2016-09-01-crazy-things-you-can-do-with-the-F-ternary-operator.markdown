@@ -2,8 +2,7 @@
 layout: post
 title:  "Crazy things you can do with the F# ternary operator"
 date:   2016-09-01 00:00:00 +0200
-tags: F#
-disqus_identifier: http://alxandr.me/2016/09/01/Crazy-things-you-can-do-with-the-F-ternary-operator.html
+tags:   F#
 ---
 I was working with two different monads in F# the other way, and writing code like the following:
 

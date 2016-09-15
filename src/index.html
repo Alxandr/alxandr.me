@@ -11,9 +11,9 @@ layout: default
         <time datetime="{{ post.date | date: "%-d %b %Y" }}" class="post-date date">{{ post.date | date: "%-d %b %Y" }}</time>
         {% if site.disqus %}
           {% if post.disqus_identifier %}
-          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-url="{{ post.disqus_identifier }}"></a>
+          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ post.disqus_identifier }}"></a>
           {% else %}
-          <span class="disqus-comment-count" data-disqus-url="{{ site.baseurl }}{{ post.url }}"></span>
+          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ site.baseurl }}{{ post.url }}"></a>
           {% endif %}
         {% endif %}
       </div>
