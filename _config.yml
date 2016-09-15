@@ -22,6 +22,7 @@ url: "http://alxandr.me" # the base hostname & protocol for your site
 twitter_username: Alxandr
 github_username:  Alxandr
 disqus: alxandr
+google_analytics: UA-52360537-1
 
 # Build settings
 gems:
