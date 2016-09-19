@@ -1,7 +1,7 @@
 module Jekyll
 
   class TagIndex < Page
-    include Jekyll::Utils
+    include Jekyll::Utils    
     def initialize(site, dir, tag, num_page, posts)
       @site = site
       @base = site.source
@@ -44,4 +44,20 @@ module Jekyll
     end
   end
 
+  module TagsFilter
+    def tags(tags)
+      site = @context.registers[:site]
+      url = site.config['url']
+      dir = site.config['tag_dir'] || 'tag'
+      tags = tags.map do |tag|
+        slug = slugify(tag)
+        tag_url = "#{url}/#{dir}/#{slug}"
+        tag_title_prefix = site.config['tag_title_prefix'] || 'Tag: '
+        "<a href=\"#{tag_url}\" title=\"#{tag_title_prefix}#{tag}\">#{tag}</a>"
+      end
+      tags.join(", ")
+    end
+  end
+
+  Liquid::Template.register_filter(TagsFilter)
 end
