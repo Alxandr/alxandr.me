@@ -1,0 +1,24 @@
+<main class="post-list">
+  {% for post in paginator.posts %}
+    <article class="post-list-item">
+      <h2 class="post-title"><a href="{{ site.baseurl }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></h2>
+      <p class="excerpt">{{ post.excerpt | remove: '<p>' | remove: '</p>' }}&hellip;</p>
+      <div class="post-meta">
+        <time datetime="{{ post.date | date: "%-d %b %Y" }}" class="post-date date">{{ post.date | date: "%-d %b %Y" }}</time>
+        <span class="post-tags">{{ post.tags | tags }}</span>
+        {% if site.disqus %}
+          {% if post.disqus_identifier %}
+          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ post.disqus_identifier }}"></a>
+          {% else %}
+          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ site.baseurl }}{{ post.url }}"></a>
+          {% endif %}
+        {% endif %}
+      </div>
+      <hr class="post-list-divider" />
+    </article>
+  {% endfor %}
+
+  {% if paginator.previous_page or paginator.next_page %}
+      {% include pagination.html %}
+  {% endif %}
+</main>
