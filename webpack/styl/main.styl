@@ -52,8 +52,23 @@ p
   margin-bottom: 1.3em
   line-height: 1.7em
 
-ul, ol
+ul, ol, dl
   margin-bottom: 15px
+
+dl
+  dt
+    float: left
+    clear: left
+    width: 100px
+    text-align: right
+    font-weight: bold
+  
+    &:after
+      content: ':'
+  
+  dd
+    margin: 0 0 0 110px
+    padding: 0 0 0.5em 0
 
 hr
   position: relative
@@ -117,14 +132,9 @@ blockquote
 
   p
     margin-bottom: 0
+    margin-top: 0
     color: #7a7a7a
-    text-indent: -0.4em
 
-    &:before 
-      content: '\201C'
-
-    &:after 
-      content: '\201D'
 img 
   display: block
   margin: 0 0 15px
@@ -140,6 +150,7 @@ img
 a
   color: #e25440
   text-decoration: none
+  cursor: pointer
 
   &:hover, &:focus
     color: #b9301c
@@ -214,11 +225,12 @@ header.header
  */
 
 .content
-  padding-top: 550px
-  padding-bottom: 60px
+  padding-top: 530px
+  padding-bottom: 40px
 
   .content-bg
     background-color: white
+    padding: 20px
 
 .container
   max-width: 800px
