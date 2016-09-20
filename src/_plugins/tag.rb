@@ -47,7 +47,7 @@ module Jekyll
   module TagsFilter
     def tags(tags)
       site = @context.registers[:site]
-      url = site.config['url']
+      url = site.baseurl
       dir = site.config['tag_dir'] || 'tag'
       tags = tags.map do |tag|
         slug = slugify(tag)
