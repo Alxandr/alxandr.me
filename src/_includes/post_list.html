@@ -10,7 +10,7 @@
           {% if post.disqus_identifier %}
           <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ post.disqus_identifier }}"></a>
           {% else %}
-          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ site.baseurl }}{{ post.url }}"></a>
+          <a href="{{ site.baseurl }}{{ post.url }}#comments" class="disqus-comment-count" data-disqus-identifier="{{ site.url }}{{ post.url }}"></a>
           {% endif %}
         {% endif %}
       </div>

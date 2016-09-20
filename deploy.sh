@@ -9,7 +9,7 @@ OUT_DIR="out"
 
 function doCompile {
   webpack --minimize
-  bundle exec jekyll build
+  JEKYLL_ENV=production bundle exec jekyll build
 }
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify

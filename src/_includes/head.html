@@ -47,6 +47,7 @@
   <link rel="stylesheet" type="text/css" href="{{ site.url }}/assets/css/main.css" />
   <!-- JS -->
   <script type="text/javascript" src="{{ site.url }}/assets/js/main.js" async></script>
+  {% if jekyll.environment == "production" %}
   <!-- DISQUS -->
   {% if site.disqus %}
   {% if page.title %}
@@ -66,5 +67,6 @@
     ga('create', '{{ site.google_analytics }}', 'auto');
     ga('send', 'pageview');
   </script>
+  {% endif %}
   {% endif %}
 </head>
