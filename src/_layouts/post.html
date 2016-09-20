@@ -8,8 +8,32 @@ layout: default
     <span class="post-date">{{ page.date | date_to_string }}</span>
     <span class="post-tags">{{ page.tags | tags }}</span>
   </span>
+  {% if page.series %}
+    <section class="series-posts">
+      <h4>Posts in series:</h4>
+      <ol>
+        {% for post in page.series.posts %}
+        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endif %}
   {{ content }}
 
+  {% if page.series %}
+    {% if page.series.prev %}
+      <span class="series-prev">
+        <a href="{{ page.series.prev.url }}">&laquo; {{ page.series.prev.title }}</a>
+      </span>
+    {% endif %}
+    {% if page.series.next %}
+      <span class="series-next">
+        <a href="{{ page.series.next.url }}">{{ page.series.next.title }} &raquo;</a>
+      </span>
+    {% endif %}
+  {% endif %}
+
+  {% if jekyll.environment == "production" %}
   {% if site.disqus %}
   <section class="comments" id="comments">
     <div id="disqus_thread"></div>
@@ -30,5 +54,6 @@ layout: default
       })();
     </script>
   </section>
+  {% endif %}
   {% endif %}
 </div>
