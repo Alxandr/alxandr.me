@@ -28,6 +28,7 @@ google_analytics: UA-52360537-1
 gems:
   - jekyll-feed
   - jekyll-paginate
+  - jekyll-sitemap
 
 destination: public
 source: src
