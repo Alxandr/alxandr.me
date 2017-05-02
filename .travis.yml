@@ -7,7 +7,7 @@ before_install:
   - ruby --version
 install:
   - npm install -g webpack
-  - npm install
+  - yarn
   - bundler install
 script: ./deploy.sh
 env:
