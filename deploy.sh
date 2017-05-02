@@ -8,7 +8,7 @@ TARGET_DIR="public"
 OUT_DIR="out"
 
 function doCompile {
-  webpack --minimize
+  webpack --optimize-minimize
   JEKYLL_ENV=production bundle exec jekyll build
 }
 
