@@ -5,6 +5,8 @@ before_install:
   - nvm use node
   - node --version
   - ruby --version
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
 install:
   - npm install -g webpack
   - yarn
@@ -14,3 +16,5 @@ env:
   global:
     - ENCRYPTION_LABEL: "bb16b97d7bf0"
     - COMMIT_AUTHOR_EMAIL: "alxandr@alxandr.me"
+cache:
+  yarn: true
