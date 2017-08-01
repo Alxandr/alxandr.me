@@ -1,0 +1,17 @@
+language: node_js
+node_js: 'node'
+
+cache:
+  yarn: true
+
+install:
+  - find . -type f -name package.json ! -path "*/node_modules/*" -exec ./script/restore.sh {} \;
+
+script:
+  - yarn run build
+
+deploy:
+  provider: surge
+  project: ./public/
+  domain: https://alxandr.me
+  skip_cleanup: true
