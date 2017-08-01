@@ -1,0 +1,8 @@
+{
+  "name": "@alxandr/gatsby-unified-frontmatter",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.9.0"
+  }
+}
