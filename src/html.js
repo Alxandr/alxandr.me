@@ -265,10 +265,6 @@ const Root = ({ body, postBodyComponents, headComponents }) => {
         <meta name="apple-mobile-web-app-title" content="Alxandr.me" />
         <meta name="application-name" content="Alxandr.me" />
         <meta name="theme-color" content="#ffffff" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Raleway:400,700|Roboto+Slab:300,400|Fira+Mono:400)"
-        />
         <style
           type="text/css"
           dangerouslySetInnerHTML={{
@@ -282,6 +278,19 @@ const Root = ({ body, postBodyComponents, headComponents }) => {
           id="___gatsby"
           dangerouslySetInnerHTML={{ __html: body }}
           className={classes.root}
+        />
+        <noscript id="deferred-styles">
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Raleway:400,700|Roboto+Slab:300,400|Fira+Mono:400)"
+          />
+        </noscript>
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){var b=function(){var d=document.getElementById("deferred-styles"),e=document.createElement("div");e.innerHTML=d.textContent,document.body.appendChild(e),d.parentElement.removeChild(d)},c=requestAnimationFrame||mozRequestAnimationFrame||webkitRequestAnimationFrame||msRequestAnimationFrame;c?c(function(){window.setTimeout(b,0)}):window.addEventListener("load",b)})();',
+          }}
         />
         {postBodyComponents}
       </body>
