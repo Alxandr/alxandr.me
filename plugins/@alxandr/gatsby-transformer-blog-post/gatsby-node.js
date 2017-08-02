@@ -1,15 +1,14 @@
 const slug = require('slug');
 const { createPost, extendPost } = require('./create-post');
 const { createTag } = require('./create-tag');
+const { createComment } = require('./create-comments');
 
 slug.defaults.modes.pretty.lower = true;
 
-exports.onCreateNode = async ({
-  node,
-  boundActionCreators,
-  getNode,
-  cache,
-}) => {
+exports.onCreateNode = async (
+  { node, boundActionCreators, getNode, cache },
+  { githubToken, githubRepo, githubOwner },
+) => {
   const {
     createNode,
     createParentChildLink,
@@ -41,6 +40,9 @@ exports.onCreateNode = async ({
           createParentChildLink,
           createNodeField,
           getNode,
+          githubOwner,
+          githubRepo,
+          githubToken,
         }),
       );
 
@@ -50,6 +52,7 @@ exports.onCreateNode = async ({
           `Tag page does not have tag set in frontmatter. Path: ${node.absolutePath}`,
         );
       }
+
       return await Promise.resolve(
         createTag(frontmatter.tag, {
           node,
@@ -60,6 +63,22 @@ exports.onCreateNode = async ({
           getNode,
         }),
       );
+
+    case 'comment':
+      if (!frontmatter.post) {
+        throw new Error('Comment does not have post set in frontmatter.');
+      }
+
+      return await Promise.resolve(
+        createComment({
+          node,
+          aux,
+          createNode,
+          createParentChildLink,
+          getNode,
+        }),
+      );
+
     default:
       return null;
   }
@@ -75,6 +94,7 @@ exports.setFieldsOnGraphQLNodeType = async ({ type, getNode, cache }) => {
           cache,
         }),
       );
+
     default:
       return null;
   }

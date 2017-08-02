@@ -1,3 +1,4 @@
+import DateTime from '../../components/date';
 import Helmet from 'react-helmet';
 import Link from 'gatsby-link';
 import PropTypes from 'prop-types';
@@ -18,6 +19,39 @@ const styleSheet = {
   },
   tags: {
     display: 'block',
+  },
+
+  comment: {
+    display: 'grid',
+    gridTemplateColumns: '50px auto',
+    gridTemplateRows: 'auto auto auto',
+    gridTemplateAreas: `
+      "icon author"
+      "icon time  "
+      "body body  "
+    `.trim(),
+  },
+
+  commentImage: {
+    width: 44,
+    height: 44,
+    margin: 0,
+    gridArea: 'icon',
+  },
+
+  commentAuthor: {
+    gridArea: 'author',
+    marginTop: 0,
+    marginBottom: 0,
+  },
+
+  commentCreated: {
+    gridArea: 'time',
+    color: '#9a9a9a',
+  },
+
+  commentBody: {
+    gridArea: 'body',
   },
 };
 
@@ -64,6 +98,26 @@ const BlogPostTemplate = ({ data }) => {
     <RootLayout meta={site.siteMetadata}>
       <Styled styles={styleSheet}>
         {classes => {
+          const comments = post.comments.map(
+            ({ id, author, created, html, link }) =>
+              <div className={classes.comment} key={id}>
+                <img
+                  src={`${author.avatar}&s=88`}
+                  className={classes.commentImage}
+                />
+                <h5 className={classes.commentAuthor}>
+                  {author.name}
+                </h5>
+                <Link to={link} className={classes.commentCreated}>
+                  <DateTime date={created} />
+                </Link>
+                <div
+                  className={classes.commentBody}
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
+              </div>,
+          );
+
           return (
             <article className={classes.root}>
               <Helmet title={post.title} />
@@ -71,9 +125,7 @@ const BlogPostTemplate = ({ data }) => {
                 {post.title}
               </h1>
               <div className={classes.meta}>
-                <time className={classes.date} dateTime={post.date}>
-                  {post.date}
-                </time>
+                <DateTime date={post.date} className={classes.date} />
                 <Tags tags={post.tags} className={classes.tags} />
               </div>
               <SeriesInfo series={post.series} />
@@ -81,6 +133,11 @@ const BlogPostTemplate = ({ data }) => {
                 className={classes.content}
                 dangerouslySetInnerHTML={{ __html: post.html }}
               />
+              <hr />
+              <section className={classes.comments}>
+                <a name="comments" />
+                {comments}
+              </section>
             </article>
           );
         }}
@@ -111,6 +168,19 @@ BlogPostTemplate.propTypes = {
           }).isRequired,
         ).isRequired,
       }),
+      comments: PropTypes.arrayOf(
+        PropTypes.shape({
+          author: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+          }).isRequired,
+          id: PropTypes.string.isRequired,
+          created: PropTypes.string.isRequired,
+          updated: PropTypes.string.isRequired,
+          link: PropTypes.string.isRequired,
+          html: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
     }).isRequired,
 
     site: PropTypes.shape({
@@ -141,6 +211,17 @@ export const pageQuery = graphql`
           title
           path
         }
+      }
+      comments {
+        author {
+          name
+          avatar
+        }
+        id
+        created
+        updated
+        link
+        html
       }
     }
     site {

@@ -60,7 +60,14 @@ module.exports = {
         trackingId: 'UA-52360537-1',
       },
     },
-    '@alxandr/gatsby-transformer-blog-post',
+    {
+      resolve: '@alxandr/gatsby-transformer-blog-post',
+      options: {
+        githubToken: process.env.GITHUB_TOKEN,
+        githubOwner: 'Alxandr',
+        githubRepo: 'alxandr.me',
+      },
+    },
     {
       resolve: '@alxandr/gatsby-plugin-feed',
     },
