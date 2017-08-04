@@ -12,17 +12,14 @@ const DateTime = ({ date, format, className }) =>
 DateTime.propTypes = {
   date: (props, propName, componentName) => {
     if (
-      !/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/.test(
+      !/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(\.\d+)?([+-][0-2]\d:[0-5]\d|Z)$/.test(
         props[propName],
       )
     ) {
       return new Error(
-        'Invalid prop `' +
-          propName +
-          '` supplied to' +
-          ' `' +
-          componentName +
-          '`. Does not match ISO date format.',
+        `Invalid prop '${propName} supplied to '${componentName}'. '${props[
+          propName
+        ]}' does not match ISO date format.`,
       );
     }
   },

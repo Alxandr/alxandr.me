@@ -96,6 +96,7 @@ const createPost = async ({
   postNode.title = postTitle;
   postNode.tags = postTags.map(t => tags[t]);
   postNode.series = postSeries;
+  postNode.commentsUrl = `https://github.com/${githubOwner}/${githubRepo}/issues/${frontmatter.issue}`;
 
   createNode(postNode);
   createParentChildLink({ parent: node, child: postNode });
