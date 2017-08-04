@@ -144,6 +144,7 @@ const extendPost = ({ getNode, cache }) => {
                       fields: {
                         name: { type: new GraphQLNonNull(GraphQLString) },
                         avatar: { type: GraphQLString },
+                        url: { type: new GraphQLNonNull(GraphQLString) },
                       },
                     }),
                   ),
@@ -176,6 +177,7 @@ const extendPost = ({ getNode, cache }) => {
               author: {
                 name: comment.user.name,
                 avatar: comment.user.avatar,
+                url: comment.user.url,
               },
 
               id: comment.key,

@@ -4,8 +4,8 @@ import formatDate from 'date-fns/format';
 
 const defaultFormat = 'DD MMM YYYY';
 
-const DateTime = ({ date, format, className }) =>
-  <time className={className} dateTime={date}>
+const DateTime = ({ date, format, ...rest }) =>
+  <time dateTime={date} {...rest}>
     {formatDate(date, format)}
   </time>;
 
@@ -25,7 +25,6 @@ DateTime.propTypes = {
   },
 
   format: PropTypes.string.isRequired,
-  className: PropTypes.string,
 };
 
 DateTime.defaultProps = {

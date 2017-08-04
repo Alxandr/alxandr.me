@@ -67,19 +67,34 @@ const BlogPostTemplate = ({ data }) => {
       <Styled styles={styleSheet}>
         {classes => {
           return (
-            <article className={classes.root}>
+            <article
+              className={classes.root}
+              itemProp="blogPost"
+              itemScope
+              itemType="http://schema.org/BlogPosting"
+              itemID={`${site.siteMetadata.siteUrl}${post.path}`}
+            >
               <Helmet title={post.title} />
-              <h1 className={classes.title}>
+              <h1 className={classes.title} itemProp="headline">
                 {post.title}
               </h1>
               <div className={classes.meta}>
-                <DateTime date={post.date} className={classes.date} />
-                <Tags tags={post.tags} className={classes.tags} />
+                <DateTime
+                  date={post.date}
+                  className={classes.date}
+                  itemProp="datePublished"
+                />
+                <Tags
+                  tags={post.tags}
+                  className={classes.tags}
+                  itemProp="keywords"
+                />
               </div>
               <SeriesInfo series={post.series} />
               <section
                 className={classes.content}
                 dangerouslySetInnerHTML={{ __html: post.html }}
+                itemProp="articleBody"
               />
               <Comments comments={post.comments} url={post.commentsUrl} />
             </article>
@@ -134,6 +149,7 @@ BlogPostTemplate.propTypes = {
       siteMetadata: PropTypes.shape({
         title: PropTypes.string.isRequired,
         subtitle: PropTypes.string.isRequired,
+        siteUrl: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
   }).isRequired,
@@ -176,6 +192,7 @@ export const pageQuery = graphql`
       siteMetadata {
         title
         subtitle
+        siteUrl
       }
     }
   }

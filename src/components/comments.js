@@ -53,9 +53,18 @@ const styles = {
   leaveCommentLink: {
     fontSize: '1.1rem',
   },
+
+  hidden: {
+    display: 'none',
+  },
+
+  authorLink: {
+    color: '#454441',
+  },
 };
 
 const commentShape = {
+  id: PropTypes.string.isRequired,
   author: PropTypes.shape({
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string,
@@ -66,19 +75,50 @@ const commentShape = {
   html: PropTypes.string.isRequired,
 };
 
-const Comment = ({ classes, author, created, updated, link, html }) =>
-  <div className={classes.comment}>
-    <img src={`${author.avatar}&s=88`} className={classes.image} />
-    <h5 className={classes.author}>
-      {author.name}
+const Comment = ({ id, classes, author, created, updated, link, html }) =>
+  <div
+    className={classes.comment}
+    itemProp="comment"
+    itemScope
+    itemID={link}
+    itemType="http://schema.org/Comment"
+  >
+    <img
+      id={`${id}/img`}
+      src={`${author.avatar}&s=88`}
+      className={classes.image}
+      itemProp="image"
+    />
+    <h5
+      className={classes.author}
+      itemProp="author"
+      itemScope
+      itemType="http://schema.org/Person"
+      itemRef={`${id}/img`}
+      itemID={author.url}
+    >
+      <a href={author.url} itemProp="url" className={classes.authorLink}>
+        <span itemProp="name">
+          {author.name}
+        </span>
+      </a>
     </h5>
     <span className={classes.created}>
       <a href={link}>
-        <DateTime date={created} />
+        <DateTime date={created} itemProp="dateCreated" />
+        <DateTime
+          date={updated}
+          itemProp="dateModified"
+          className={classes.hidden}
+        />
       </a>
       {updated !== created && ' (updated)'}
     </span>
-    <div className={classes.body} dangerouslySetInnerHTML={{ __html: html }} />
+    <div
+      className={classes.body}
+      dangerouslySetInnerHTML={{ __html: html }}
+      itemProp="text"
+    />
   </div>;
 
 Comment.propTypes = {
@@ -93,6 +133,7 @@ const Comments = ({ comments, url }) =>
       const children = [
         <hr key="comments-top-hr" className={classes.commentHr} />,
       ];
+
       for (let i = 0; i < comments.length; i++) {
         const { author, id, created, updated, link, html } = comments[i];
 
@@ -109,6 +150,7 @@ const Comments = ({ comments, url }) =>
             updated={updated}
             link={link}
             html={html}
+            id={id}
           />,
         );
       }
@@ -133,7 +175,6 @@ Comments.propTypes = {
   comments: PropTypes.arrayOf(
     PropTypes.shape({
       ...commentShape,
-      id: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
 

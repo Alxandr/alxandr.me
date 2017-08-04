@@ -30,6 +30,7 @@ const fetchComments = async ({
           user: {
             name: comment.user.login,
             avatar: comment.user.avatar_url,
+            url: comment.user.html_url,
           },
         })
         .trim();

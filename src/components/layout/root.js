@@ -166,12 +166,12 @@ const RootLayout = ({ meta, children }) =>
             [classes.sticky]: zen,
           })}
         >
-          <h1 className={classes.title}>
+          <h1 className={classes.title} itemProp="headline">
             <Link to="/">
               {meta.title}
             </Link>
           </h1>
-          <p className={classes.subtitle}>
+          <p className={classes.subtitle} itemProp="alternativeHeadline">
             {meta.subtitle}
           </p>
         </header>,

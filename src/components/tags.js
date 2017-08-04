@@ -2,7 +2,7 @@ import Link from 'gatsby-link';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Tags = ({ tags, className }) => {
+const Tags = ({ tags, ...rest }) => {
   if (tags.length === 0) return null;
 
   const arr = [];
@@ -18,7 +18,7 @@ const Tags = ({ tags, className }) => {
   }
 
   return (
-    <span className={className}>
+    <span {...rest}>
       {arr}
     </span>
   );
@@ -31,7 +31,6 @@ Tags.propTypes = {
       path: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
-  className: PropTypes.string,
 };
 
 export default Tags;
