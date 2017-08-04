@@ -93,24 +93,45 @@ const BlogListTemplate = ({
             }
 
             return (
-              <article className={classes.post} key={post.id}>
-                <h2 className={classes.postTitle}>
-                  <Link to={post.path} className={classes.postTitleLink}>
+              <article
+                className={classes.post}
+                key={post.id}
+                itemProp="blogPosts"
+                itemScope
+                itemType="http://schema.org/BlogPosting"
+                itemID={`${site.siteMetadata.siteUrl}${post.path}`}
+              >
+                <h2 className={classes.postTitle} itemProp="headline">
+                  <Link
+                    to={post.path}
+                    className={classes.postTitleLink}
+                    itemProp="url"
+                  >
                     {post.title}
                   </Link>
                 </h2>
-                <p className={classes.excerpt}>
+                <p className={classes.excerpt} itemProp="description">
                   {post.excerpt}
                 </p>
                 <div className={classes.postMeta}>
-                  <DateTime date={post.date} className={classes.postDate} />
-                  <Tags tags={post.tags} className={classes.postTags} />
+                  <DateTime
+                    date={post.date}
+                    className={classes.postDate}
+                    itemProp="datePublished"
+                  />
+                  <Tags
+                    tags={post.tags}
+                    className={classes.postTags}
+                    itemProp="keywords"
+                  />
                   {' - '}
                   <Link
                     to={`${post.path}#comments`}
                     className={classes.commentLink}
                   >
-                    {post.commentCount}{' '}
+                    <span itemProp="commentCount">
+                      {post.commentCount}
+                    </span>{' '}
                     {post.commentCount === 1 ? 'comment' : 'comments'}
                   </Link>
                 </div>
@@ -169,6 +190,7 @@ export const dataShape = {
     siteMetadata: PropTypes.shape({
       title: PropTypes.string.isRequired,
       subtitle: PropTypes.string.isRequired,
+      siteUrl: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
 
@@ -216,6 +238,7 @@ export const pageQuery = graphql`
       siteMetadata {
         title
         subtitle
+        siteUrl
       }
     }
   }

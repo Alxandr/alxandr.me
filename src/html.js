@@ -273,7 +273,11 @@ const Root = ({ body, postBodyComponents, headComponents }) => {
         />
         {headComponents}
       </head>
-      <body>
+      <body
+        itemScope
+        itemType="http://schema.org/Blog"
+        itemID="https://alxandr.me/"
+      >
         <div
           id="___gatsby"
           dangerouslySetInnerHTML={{ __html: body }}
