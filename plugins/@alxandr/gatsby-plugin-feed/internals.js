@@ -51,7 +51,7 @@ exports.defaultOptions = {
           edges {
             node {
               title
-              date(format: "ISO")
+              date
               path
               excerpt
               html

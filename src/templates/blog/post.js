@@ -1,3 +1,5 @@
+import Comments from '../../components/comments';
+import DateTime from '../../components/date';
 import Helmet from 'react-helmet';
 import Link from 'gatsby-link';
 import PropTypes from 'prop-types';
@@ -71,9 +73,7 @@ const BlogPostTemplate = ({ data }) => {
                 {post.title}
               </h1>
               <div className={classes.meta}>
-                <time className={classes.date} dateTime={post.date}>
-                  {post.date}
-                </time>
+                <DateTime date={post.date} className={classes.date} />
                 <Tags tags={post.tags} className={classes.tags} />
               </div>
               <SeriesInfo series={post.series} />
@@ -81,6 +81,7 @@ const BlogPostTemplate = ({ data }) => {
                 className={classes.content}
                 dangerouslySetInnerHTML={{ __html: post.html }}
               />
+              <Comments comments={post.comments} url={post.commentsUrl} />
             </article>
           );
         }}
@@ -111,6 +112,22 @@ BlogPostTemplate.propTypes = {
           }).isRequired,
         ).isRequired,
       }),
+
+      commentsUrl: PropTypes.string.isRequired,
+
+      comments: PropTypes.arrayOf(
+        PropTypes.shape({
+          author: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+          }).isRequired,
+          id: PropTypes.string.isRequired,
+          created: PropTypes.string.isRequired,
+          updated: PropTypes.string.isRequired,
+          link: PropTypes.string.isRequired,
+          html: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
     }).isRequired,
 
     site: PropTypes.shape({
@@ -141,6 +158,18 @@ export const pageQuery = graphql`
           title
           path
         }
+      }
+      commentsUrl
+      comments {
+        author {
+          name
+          avatar
+        }
+        id
+        created
+        updated
+        link
+        html
       }
     }
     site {

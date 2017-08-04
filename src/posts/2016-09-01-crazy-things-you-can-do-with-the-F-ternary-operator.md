@@ -4,6 +4,7 @@ title:  "Crazy things you can do with the F# ternary operator"
 date:   "2016-08-31T22:00:00.000Z"
 tags:   F#
 author: Alxandr
+issue:  7
 ---
 I was working with two different monads in F# the other way, and writing code like the following:
 

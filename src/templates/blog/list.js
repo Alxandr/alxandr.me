@@ -1,3 +1,4 @@
+import DateTime from '../../components/date';
 import Helmet from 'react-helmet';
 import Link from 'gatsby-link';
 import PropTypes from 'prop-types';
@@ -45,6 +46,10 @@ const styleSheet = {
   postTags: {
     fontSize: '.8rem',
     display: 'inline',
+  },
+
+  commentLink: {
+    color: '#c7c7c7',
   },
 };
 
@@ -98,10 +103,16 @@ const BlogListTemplate = ({
                   {post.excerpt}
                 </p>
                 <div className={classes.postMeta}>
-                  <time dateTime={post.date} className={classes.postDate}>
-                    {/* TODO: Format */ post.date}
-                  </time>
+                  <DateTime date={post.date} className={classes.postDate} />
                   <Tags tags={post.tags} className={classes.postTags} />
+                  {' - '}
+                  <Link
+                    to={`${post.path}#comments`}
+                    className={classes.commentLink}
+                  >
+                    {post.commentCount}{' '}
+                    {post.commentCount === 1 ? 'comment' : 'comments'}
+                  </Link>
                 </div>
                 {divider}
               </article>
@@ -142,6 +153,7 @@ export const dataShape = {
           path: PropTypes.string.isRequired,
           title: PropTypes.string.isRequired,
           excerpt: PropTypes.string.isRequired,
+          commentCount: PropTypes.number.isRequired,
           tags: PropTypes.arrayOf(
             PropTypes.shape({
               name: PropTypes.string.isRequired,
@@ -173,6 +185,7 @@ BlogListTemplate.propTypes = {
   pathContext: PropTypes.shape(pathContextShape).isRequired,
   children: PropTypes.node,
   className: PropTypes.string,
+  title: PropTypes.string,
 };
 
 export default BlogListTemplate;
@@ -191,6 +204,7 @@ export const pageQuery = graphql`
           excerpt(pruneLength: 250)
           date
           path
+          commentCount
           tags {
             name
             path

@@ -60,6 +60,7 @@ const process = async (node, getNode) => {
   return aux;
 };
 
+// TODO: Figure out if works as intended for post and use for comments
 const makeGetAux = ({ cache: cacheStore, getNode }) => async node => {
   const cache = createCache(cacheStore);
   const cached = await cache.get(node, 'aux');

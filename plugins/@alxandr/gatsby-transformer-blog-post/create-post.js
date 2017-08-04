@@ -6,9 +6,11 @@ const {
   GraphQLNonNull,
   GraphQLObjectType,
 } = require('graphql');
+const GitHubApi = require('github');
 const formatDate = require('date-fns/format');
 const { createTag } = require('./create-tag');
 const { createSeries } = require('./create-series');
+const { fetchComments } = require('./create-comments');
 
 const toArray = val => (Array.isArray(val) ? val : [val]);
 
@@ -18,6 +20,9 @@ const createPost = async ({
   createNode,
   createParentChildLink,
   getNode,
+  githubOwner,
+  githubRepo,
+  githubToken,
 }) => {
   const { frontmatter } = aux;
   const postSlug = frontmatter.slug || slug(frontmatter.title);
@@ -60,12 +65,38 @@ const createPost = async ({
     : null;
   /* eslint-enable indent */
 
+  if (!frontmatter.issue) {
+    // eslint-disable-next-line no-console
+    console.error(`Post ${postTitle} does not have a configured issue.`);
+  } else {
+    const github = new GitHubApi({
+      headers: {
+        'user-agent': 'gatsby-transformer-blog-post',
+      },
+    });
+
+    github.authenticate({
+      type: 'token',
+      token: githubToken,
+    });
+
+    await fetchComments({
+      github,
+      owner: githubOwner,
+      repo: githubRepo,
+      issue: frontmatter.issue,
+      createNode,
+      post: postId,
+    });
+  }
+
   postNode.slug = postSlug;
   postNode.path = postPath;
   postNode.date = postDate;
   postNode.title = postTitle;
   postNode.tags = postTags.map(t => tags[t]);
   postNode.series = postSeries;
+  postNode.commentsUrl = `https://github.com/${githubOwner}/${githubRepo}/issues/${frontmatter.issue}`;
 
   createNode(postNode);
   createParentChildLink({ parent: node, child: postNode });
@@ -93,8 +124,82 @@ const extendPost = ({ getNode, cache }) => {
     html: {
       type: new GraphQLNonNull(GraphQLString),
       resolve: async node => {
-        const aux = await getAux(node);
+        const parent = getNode(node.parent);
+        const aux = await getAux(parent);
         return aux[_content];
+      },
+    },
+
+    comments: {
+      type: new GraphQLNonNull(
+        new GraphQLList(
+          new GraphQLNonNull(
+            new GraphQLObjectType({
+              name: 'BlogPostComment',
+              fields: {
+                author: {
+                  type: new GraphQLNonNull(
+                    new GraphQLObjectType({
+                      name: 'CommentAuthor',
+                      fields: {
+                        name: { type: new GraphQLNonNull(GraphQLString) },
+                        avatar: { type: GraphQLString },
+                      },
+                    }),
+                  ),
+                },
+
+                id: { type: new GraphQLNonNull(GraphQLString) },
+                created: { type: new GraphQLNonNull(GraphQLString) },
+                updated: { type: new GraphQLNonNull(GraphQLString) },
+                link: { type: new GraphQLNonNull(GraphQLString) },
+                html: { type: new GraphQLNonNull(GraphQLString) },
+              },
+            }),
+          ),
+        ),
+      ),
+
+      resolve: async node => {
+        const commentsNode = getNode(`Comments < ${node.id}`);
+        if (!commentsNode) {
+          return [];
+        }
+
+        const comments = await Promise.all(
+          commentsNode.comments.map(async commentId => {
+            const comment = getNode(commentId);
+            const parent = getNode(comment.parent);
+            const aux = await getAux(parent);
+
+            return {
+              author: {
+                name: comment.user.name,
+                avatar: comment.user.avatar,
+              },
+
+              id: comment.key,
+              created: comment.created,
+              updated: comment.updated,
+              link: comment.link,
+              html: aux[_content],
+            };
+          }),
+        );
+
+        return comments;
+      },
+    },
+
+    commentCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: async node => {
+        const commentsNode = getNode(`Comments < ${node.id}`);
+        if (!commentsNode) {
+          return 0;
+        }
+
+        return commentsNode.comments.length;
       },
     },
 
@@ -177,19 +282,7 @@ const extendPost = ({ getNode, cache }) => {
       },
     },
 
-    date: {
-      type: new GraphQLNonNull(GraphQLString),
-      args: {
-        format: {
-          type: GraphQLString,
-          defaultValue: 'DD MMM YYYY',
-        },
-      },
-      resolve: (node, { format }) => {
-        if (format === 'ISO') return formatDate(node.date);
-        return formatDate(node.date, format);
-      },
-    },
+    date: { type: new GraphQLNonNull(GraphQLString) },
   };
 };
 exports.extendPost = extendPost;
