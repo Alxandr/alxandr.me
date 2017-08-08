@@ -4,11 +4,18 @@ node_js: 'node'
 cache:
   yarn: true
 
+before_install:
+  - npm install -g greenkeeper-lockfile@1
+
 install:
   - find . -type f -name package.json ! -path "*/node_modules/*" -exec ./script/restore.sh {} \;
 
+before_script: greenkeeper-lockfile-update
+
 script:
   - npm run build
+
+after_script: greenkeeper-lockfile-upload
 
 deploy:
   provider: surge
