@@ -8,7 +8,7 @@ install:
   - find . -type f -name package.json ! -path "*/node_modules/*" -exec ./script/restore.sh {} \;
 
 script:
-  - yarn run build
+  - npm run build
 
 deploy:
   provider: surge
