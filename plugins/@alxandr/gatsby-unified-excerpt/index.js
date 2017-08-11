@@ -19,7 +19,7 @@ module.exports = function excerptAttacher() {
     },
   };
 
-  return function extractExcerpt(tree) {
+  return function extractText(tree) {
     const textNodes = [];
     visit(tree, 'text', textNode => textNodes.push(textNode.value));
     gatsby.aux.text = textNodes.join(' ');

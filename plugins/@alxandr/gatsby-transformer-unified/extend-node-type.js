@@ -36,7 +36,6 @@ const extendNodeType = async ({ type, cache, getNode }, pluginOptions) => {
       content: {
         type: new GraphQLNonNull(GraphQLString),
         resolve: async node => {
-          debugger;
           const aux = await getAux(node);
           return aux[_content];
         },

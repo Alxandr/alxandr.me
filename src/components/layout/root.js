@@ -10,6 +10,8 @@ import throttle from 'raf-throttle';
 const styleSheet = {
   root: {},
 
+  small: {},
+
   topImage: {
     position: 'fixed',
     zIndex: -1,
@@ -82,6 +84,14 @@ const styleSheet = {
 
   main: {
     paddingTop: 530,
+
+    '&$small': {
+      paddingTop: 120,
+
+      '@media (max-width: 490px)': {
+        paddingTop: 80,
+      },
+    },
   },
 
   mainBg: {
@@ -149,12 +159,14 @@ ScrollHandler.propTypes = {
   children: PropTypes.func.isRequired,
 };
 
-const RootLayout = ({ meta, children }) =>
+const RootLayout = ({ meta, children, small }) =>
   <ScrollHandler>
     {({ zen, classes }) => {
       return [
         <div
-          className={classnames(classes.topImage, { [classes.sticky]: zen })}
+          className={classnames(classes.topImage, {
+            [classes.sticky]: zen || small,
+          })}
           key="topimage"
         >
           <div className={classes.topImageOverlay} />
@@ -163,7 +175,7 @@ const RootLayout = ({ meta, children }) =>
         <header
           key="header"
           className={classnames(classes.header, {
-            [classes.sticky]: zen,
+            [classes.sticky]: zen || small,
           })}
         >
           <h1 className={classes.title} itemProp="headline">
@@ -176,7 +188,10 @@ const RootLayout = ({ meta, children }) =>
           </p>
         </header>,
 
-        <div className={classes.main} key="main">
+        <div
+          className={classnames(classes.main, { [classes.small]: small })}
+          key="main"
+        >
           <div className={classes.mainBg}>
             <div className={classes.content}>
               {children}
@@ -193,6 +208,11 @@ RootLayout.propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string.isRequired,
   }).isRequired,
+  small: PropTypes.bool,
+};
+
+RootLayout.defaultProps = {
+  small: false,
 };
 
 export default RootLayout;

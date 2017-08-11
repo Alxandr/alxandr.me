@@ -1,0 +1,7 @@
+{
+  "name": "@alxandr/gatsby-plugin-search",
+  "license": "MIT",
+  "dependencies": {
+    "elasticlunr": "^0.9.5"
+  }
+}

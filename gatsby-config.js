@@ -6,7 +6,7 @@ module.exports = {
     siteUrl: 'https://alxandr.me',
   },
   plugins: [
-    'gatsby-plugin-catch-links',
+    //'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-nprogress',
     {
@@ -71,5 +71,6 @@ module.exports = {
     {
       resolve: '@alxandr/gatsby-plugin-feed',
     },
+    '@alxandr/gatsby-plugin-search',
   ],
 };

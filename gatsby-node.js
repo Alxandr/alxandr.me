@@ -129,4 +129,10 @@ exports.createPages = async ({ boundActionCreators, graphql }) => {
       },
     });
   }
+
+  createPage({
+    path: '/search',
+    component: path.resolve('src/templates/search.js'),
+    context: {},
+  });
 };
