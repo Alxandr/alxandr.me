@@ -25,7 +25,7 @@ const styleSheet = {
     height: '100%',
     transition: 'background-color .2s',
 
-    '$sticky &': {
+    '$active$sticky &': {
       backgroundColor: 'white',
     },
   },
@@ -35,7 +35,7 @@ const styleSheet = {
     fontSize: '2.5rem',
     letterSpacing: '4px',
     color: '#fff',
-    position: 'fixed',
+    position: 'absolute',
     width: '100%',
     textAlign: 'center',
     paddingTop: '160px',
@@ -48,11 +48,15 @@ const styleSheet = {
       fontSize: '1.5rem',
     },
 
-    '&$sticky': {
-      paddingTop: 20,
-      backgroundColor: 'white',
-      color: 'black',
-      borderBottom: '1px solid #ddd',
+    '&$active': {
+      position: 'fixed',
+
+      '&$sticky': {
+        paddingTop: 20,
+        backgroundColor: 'white',
+        color: 'black',
+        borderBottom: '1px solid #ddd',
+      },
     },
   },
 
@@ -95,6 +99,7 @@ const styleSheet = {
   },
 
   sticky: {},
+  active: {},
 };
 
 class ScrollHandler extends Component {
@@ -103,6 +108,7 @@ class ScrollHandler extends Component {
 
     this.state = {
       zen: false,
+      active: false,
     };
     this.handler = throttle(() => {
       if (document.body.scrollTop > 260) {
@@ -119,6 +125,7 @@ class ScrollHandler extends Component {
     if (this.host) {
       document.addEventListener('scroll', this.handler, false);
       this.handler();
+      this.setState(s => ({ ...s, active: true }));
     }
   }
 
@@ -126,6 +133,8 @@ class ScrollHandler extends Component {
     if (this.host) {
       document.removeEventListener('scroll', this.handler, false);
     }
+
+    this.setState(s => ({ ...s, active: false }));
   }
 
   render() {
@@ -151,7 +160,7 @@ ScrollHandler.propTypes = {
 
 const RootLayout = ({ meta, children }) =>
   <ScrollHandler>
-    {({ zen, classes }) => {
+    {({ zen, classes, active }) => {
       return [
         <div
           className={classnames(classes.topImage, { [classes.sticky]: zen })}
@@ -164,6 +173,7 @@ const RootLayout = ({ meta, children }) =>
           key="header"
           className={classnames(classes.header, {
             [classes.sticky]: zen,
+            [classes.active]: active,
           })}
         >
           <h1 className={classes.title} itemProp="headline">
