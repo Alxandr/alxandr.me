@@ -163,7 +163,10 @@ const RootLayout = ({ meta, children }) =>
     {({ zen, classes, active }) => {
       return [
         <div
-          className={classnames(classes.topImage, { [classes.sticky]: zen })}
+          className={classnames(classes.topImage, {
+            [classes.sticky]: zen,
+            [classes.active]: active,
+          })}
           key="topimage"
         >
           <div className={classes.topImageOverlay} />
