@@ -1,4 +1,7 @@
-# gatsby-starter-default
+# Alxandr.me
+
+[![Build history](https://buildstats.info/travisci/chart/Alxandr/alxandr.me)](https://travis-ci.org/Alxandr/alxandr.me)
+
 The default Gatsby starter
 
 For an overview of the project structure please refer to the [Gatsby documentation - Building with Components](https://www.gatsbyjs.org/docs/building-with-components/)
