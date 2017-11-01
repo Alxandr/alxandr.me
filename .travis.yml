@@ -17,5 +17,5 @@ before_deploy: pip install --user awscli
 
 deploy:
   provider: script
-  script: ~/.local/bin/aws s3 sync public s3://alxandr.me --region=eu-central-1 --acl public-read --sse --delete
+  script: ./script/deploy.sh
   skip_cleanup: true
