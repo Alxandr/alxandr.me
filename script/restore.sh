@@ -1,8 +1,7 @@
 #!/bin/bash
 
-FILE=$1
-DIR=$(dirname "$1")
-
-pushd "$DIR"
-npm install
-popd
+find . -type f -name package.json ! -path "*/node_modules/*" | while read package; do
+  pushd "$(dirname $package)"
+  npm i
+  popd
+done

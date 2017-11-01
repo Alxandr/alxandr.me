@@ -1,24 +1,22 @@
 language: node_js
-node_js: 'node'
-
-cache:
-  yarn: true
+node_js: node
 
 before_install:
-  - npm install -g greenkeeper-lockfile@1
 
+- npm install -g greenkeeper-lockfile@1
 install:
-  - find . -type f -name package.json ! -path "*/node_modules/*" -exec ./script/restore.sh {} \;
+- ./script/restore.sh
 
 before_script: greenkeeper-lockfile-update
 
 script:
-  - npm run build
-
+- npm run build
 after_script: greenkeeper-lockfile-upload
 
 deploy:
-  provider: surge
-  project: ./public/
-  domain: https://alxandr.me
-  skip_cleanup: true
+  provider: s3
+  access_key_id:
+    secure: jV8ws7FQ3lkUb8b3q2IkJUb9p91+6t1+nwzHlowBV57uLB4fdNdlIpvXQMP0/PwwiYa9lQIC4VdRjO7gWoXu8HSGHjrA3t89fNll6qAjJTDG525BYICv8USBnBStRFS5QhBfpomsL0G71W7KO8Hl5eB446IBhWgvHiu2QUc6lPdFsbFTwRyfVq6anGOiCT3sBoVPErSOExLt01Dmq6d35s+8yWwwigJYARuE5dkZp3rHdGl8lDqbv1sdjT0eLz3STwTJ2bcnIGXUZ/0FsBxYSvLwjc3xuRMlsxdpXSjwiWo6uZHNDTVmV2m9crsWFV361tNV6Tp5TMYo6lCgr5ehGMZf/YAi5ajs54IkA3vVQtCeRXistcF9FcEteSuR+cxADtGpaWPTDqt4zIihjOasDxQElW2PKjnT3QVO4PTuiq4eROpXzyygFkwYJumSwii+5lM/XM8NHWK4BOv5k7muoykEp8VqB96Whu2sTsoi2hhjXHThAJJjlEKbx6sm6KHxAheFON0ccmqrbZcVhijl+5c4zyECw0XVuIcPhce+12L7R94pfVp7HEPfSpkI1JtGhN05iN2lKuGuYfQ2DL0CmcudA3YY4Y9L9zyvQ/YiwpTrOH/64qhaRx1AhLZxH3iGj3V+mL0/UNfMv4K14gu63hyVVkuaVys5xw9lXLsXLME=
+  secret_access_key:
+    secure: rwSJcYKFW22dnte9DUpVEINrUJOGvTTue9v+SzDfU3befWDgYVvc1ISHebiI+nagRjeZMq4+fBu1mnuYRTxmSWBNzbS3R1fxX0EJ6YRGKVszNs1Dx9VHC1MkKHTI6AD0F4wdll0Cu0ACDQq2xEAKb7+dehbetz7OMCqPYP6ebyyMlF72LtDn312kMi4OEav1UBTMmD9frN0lQUkngp8zt/EJLaR9iGOzwL9VRTr+CmgJQKdbhXvdxc5pX+HBS9RWH+oZx1sAH7ZPyP65ybBcneLPK5vdzNlHpYGsOAELmrgAHyjeVyK0cYA5TxFAM6K/JZ8H9jfI2GgJeQat1SZDlQvs1865ERCLWmMKFAbpnOi6cN8WcqnPaE4gMhUGvjC33PU/MSSe5G7edlQd/L9BEU5y2ljuUdoqjGFhtCbOONT9cR60Z/XlGlQFxkhzHh6MNjuKr2ukeNLoEXRM7zwJNEYetjNLm8F/3CNCVIn8lZc4UeUSHeqdLBcRbDX7dYwEpTJULMVTZDk1FLcWVjLSzYrigL8+AWuQHfbuBsgQVY7h85Izze/pJ+13EuKFOxAhz9aJMgrbQD0ud3alfazfrtmZuANCw7mOIei3woeJuMshO3Ofd2OkFAH9yhNMHqawuCamRCRop/rWupIoBfiE2Jo3aR0XZN57E+4G56H9QYo=
+  bucket: alxandr.me
