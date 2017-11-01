@@ -3,9 +3,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "lodash.merge": "^4.6.0",
-    "pify": "^3.0.0",
-    "rss": "^1.2.2",
-    "xmlbuilder": "^9.0.1"
+    "lodash.merge": "4.6.0",
+    "pify": "3.0.0",
+    "rss": "1.2.2",
+    "xmlbuilder": "9.0.4"
   }
 }

@@ -3,9 +3,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "remark-parse": "^4.0.0",
-    "remark-rehype": "^2.0.1",
-    "remark-stringify": "^4.0.0",
-    "unified": "^6.1.5"
+    "remark-parse": "4.0.0",
+    "remark-rehype": "2.0.1",
+    "remark-stringify": "4.0.0",
+    "unified": "6.1.5"
   }
 }

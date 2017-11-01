@@ -3,6 +3,6 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^3.9.0"
+    "js-yaml": "3.10.0"
   }
 }

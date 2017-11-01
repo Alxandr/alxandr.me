@@ -1,7 +1,7 @@
 {
   "name": "gatsby-transformer-blog-post",
   "dependencies": {
-    "github": "^9.2.0",
-    "js-yaml": "^3.9.1"
+    "github": "9.2.0",
+    "js-yaml": "3.10.0"
   }
 }
