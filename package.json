@@ -46,6 +46,6 @@
     "babel-eslint": "8.0.0",
     "eslint": "4.3.0",
     "eslint-plugin-react": "7.1.0",
-    "prettier": "1.5.2"
+    "prettier": "1.8.0"
   }
 }
