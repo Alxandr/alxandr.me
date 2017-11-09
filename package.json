@@ -8,7 +8,7 @@
     "clean-css": "4.1.7",
     "date-fns": "1.28.5",
     "gatsby": "1.0.1",
-    "gatsby-link": "1.0.1",
+    "gatsby-link": "1.6.25",
     "gatsby-plugin-catch-links": "1.0.1",
     "gatsby-plugin-google-analytics": "1.0.1",
     "gatsby-plugin-jss": "1.5.0",
