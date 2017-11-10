@@ -111,7 +111,13 @@ class ScrollHandler extends Component {
       active: false,
     };
     this.handler = throttle(() => {
-      if (document.body.scrollTop > 260) {
+      const scroll =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+      
+      if (scroll > 260) {
         if (!this.state.zen) {
           this.setState(s => ({ ...s, zen: true }));
         }
