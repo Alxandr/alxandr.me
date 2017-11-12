@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@alxandr/gatsby-plugin-google-analytics": "^0.1.0",
-    "@alxandr/gatsby-transformer-blog-post": "^0.1.17",
+    "@alxandr/gatsby-transformer-blog-post": "^0.1.18",
     "@alxandr/gatsby-transformer-unified": "^0.1.12",
     "@alxandr/gatsby-unified-excerpt": "^0.1.0",
     "@alxandr/gatsby-unified-frontmatter": "^0.1.0",
