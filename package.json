@@ -8,7 +8,7 @@
     "clean-css": "^4.1.9",
     "gatsby": "^1.9.108",
     "gatsby-link": "^1.6.26",
-    "gatsby-plugin-react-helmet": "^1.0.8",
+    "gatsby-plugin-react-helmet": "^2.0.1",
     "gatsby-plugin-react-next": "^1.0.4",
     "gatsby-plugin-stylus": "^1.1.11",
     "jss-preset-default": "^4.0.1",
