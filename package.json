@@ -45,7 +45,7 @@
     "rehype-highlight": "^2.0.1",
     "rehype-stringify": "^3.0.0",
     "remark-frontmatter": "^1.1.0",
-    "remark-parse": "^4.0.0",
+    "remark-parse": "^5.0.0",
     "remark-rehype": "^2.0.1"
   }
 }
