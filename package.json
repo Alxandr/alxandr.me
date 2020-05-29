@@ -1,0 +1,75 @@
+{
+  "name": "alxandr.me",
+  "version": "0.0.0-dev",
+  "description": "My blog",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alxandr/alxandr.me.git"
+  },
+  "author": "Aleksander Heintz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Alxandr/alxandr.me/issues"
+  },
+  "homepage": "https://github.com/Alxandr/alxandr.me#readme",
+  "private": true,
+  "dependencies": {
+    "@mapbox/rehype-prism": "^0.4.0",
+    "classnames": "^2.2.6",
+    "globby": "^11.0.0",
+    "gray-matter": "^4.0.2",
+    "hast-util-is-element": "^1.0.4",
+    "lodash": "^4.17.15",
+    "luxon": "^1.24.1",
+    "next": "^9.4.2",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rehype-slug": "^3.0.0",
+    "rehype-stringify": "^7.0.0",
+    "remark-footnotes": "^1.0.0",
+    "remark-parse": "^8.0.2",
+    "remark-rehype": "^7.0.0",
+    "slugify": "^1.4.0",
+    "unified": "^9.0.0",
+    "unist-util-visit": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/lodash": "^4.14.152",
+    "@types/luxon": "^1.24.0",
+    "@types/mkdirp": "^1.0.0",
+    "@types/node": "^14.0.5",
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "^16.9.35",
+    "mkdirp": "^1.0.4",
+    "postcss-flexbugs-fixes": "^4.2.1",
+    "postcss-nested": "^4.2.1",
+    "postcss-preset-env": "^6.7.0",
+    "stylelint": "^13.5.0",
+    "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-prettier": "^1.1.2",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.3",
+    "typescript-plugin-css-modules": "^2.3.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "posts:release": "ts-node --transpile-only --script-mode bin/release.tsx",
+    "posts:reorg": "ts-node --transpile-only --script-mode bin/reorg.tsx"
+  },
+  "importSort": {
+    ".js, .jsx, .es6, .es, .ts, .tsx": {
+      "parser": "babylon",
+      "style": "eslint",
+      "options": {}
+    }
+  }
+}

@@ -1,0 +1,180 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--text-color, #454441);
+  font-family: 'Raleway', sans-serif;
+  background: var(--background-color, #fff);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 300;
+  font-family: 'Roboto Slab', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  margin-bottom: 1.3rem;
+  line-height: 1.7em;
+}
+
+ul,
+ol,
+dl {
+  margin-bottom: 15px;
+}
+
+strong {
+  color: #222;
+  font-weight: bold;
+}
+
+a {
+  color: #e25440;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: #b9301c;
+    transition: color 0.2s;
+  }
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 3.2rem;
+  line-height: 1.2em;
+  letter-spacing: 0.05em;
+}
+
+h2 {
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+li,
+dd,
+dt {
+  margin-bottom: 0.5em;
+  line-height: 1.7em;
+}
+
+dl {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  & dt {
+    float: left;
+    clear: left;
+    width: 30%;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    text-align: right;
+
+    &::after {
+      content: ':';
+    }
+  }
+
+  & dd {
+    float: left;
+    width: 70%;
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+  }
+}
+
+abbr {
+  display: inline-block;
+  padding: 3px;
+  color: #555;
+  font-weight: bold;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+code,
+pre {
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+}
+
+code {
+  padding: 0.25em 0.5em;
+  color: #bf616a;
+  font-size: 0.85em;
+  font-family: 'Fira Code', consolas, monospace;
+  background-color: #f9f9f9;
+  border-radius: 3;
+}
+
+pre {
+  display: block;
+  margin: 0 0 14px;
+  padding: 15px 20px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  white-space: pre;
+  background-color: #f9f9f9;
+
+  & code {
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+    background-color: transparent;
+  }
+}
+
+.highlight {
+  margin-bottom: 15px;
+  border-radius: 4px;
+
+  & pre {
+    margin-bottom: 0;
+  }
+}
+
+blockquote {
+  margin: 15px 0;
+  padding: 5px 30px 5px 25px;
+  border-left: 5px solid #eee;
+
+  & p {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #7a7a7a;
+  }
+}
+
+img {
+  display: block;
+  margin: 0 0 15px;
+  border-radius: 15px;
+}

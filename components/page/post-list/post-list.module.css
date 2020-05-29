@@ -1,0 +1,62 @@
+.post:not(:first-child)::before {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 80px);
+  height: 1px;
+  margin: 30px auto 20px auto;
+  border-top: 1px solid #ddd;
+  content: '';
+}
+
+.postTitle {
+  margin-top: 0;
+  margin-bottom: 0.2em;
+  font-size: 1.5rem;
+  line-height: 1.3em;
+}
+
+.postTitleLink {
+  color: #6f0000;
+  font-weight: 300;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.excerpt {
+  display: block;
+  margin: 0;
+  color: #777;
+  font-size: 0.9rem;
+
+  &.short {
+    display: none;
+  }
+
+  @media (max-width: 490px) {
+    &.short {
+      display: block;
+    }
+
+    &.long {
+      display: none;
+    }
+  }
+}
+
+.postMeta {
+  margin: 0.7em 0 0;
+  color: #a7a7a7;
+  font-size: 0.9rem;
+}
+
+.postDate {
+  display: inline;
+  margin: -10px 0 10px;
+  color: #a7a7a7;
+  font-size: 0.8rem;
+}
+
+.postTags {
+  display: inline;
+  font-size: 0.8rem;
+}
