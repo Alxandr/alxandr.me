@@ -8,10 +8,14 @@ module.exports = (phase /*: string */) => {
   // when `next build` or `npm run build` is used
   const isStaging = phase === PHASE_PRODUCTION_BUILD && process.env.STAGING === '1';
 
-  //console.log(`isDev:${isDev}  isProd:${isProd}   isStaging:${isStaging}`);
+  if (!isDev) {
+    console.log(`isProd:${isProd}   isStaging:${isStaging}`);
+  }
+
+  const includeDrafts = isDev || isStaging;
 
   const env = {
-    INCLUDE_DRAFTS: isDev ? 'true' : 'false',
+    INCLUDE_DRAFTS: includeDrafts ? 'true' : 'false',
   };
 
   return { env };

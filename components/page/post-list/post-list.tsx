@@ -27,6 +27,7 @@ type PostMeta = {
   readonly excerptShort: string;
   readonly tags: TagMeta[];
   readonly series: SeriesMeta | null;
+  readonly draft: boolean;
 };
 
 type StaticProps = {
@@ -67,6 +68,7 @@ const getStaticProps = async (
         excerptShort: await p.excerptShort,
         tags: p.tags.map((t) => ({ name: t.name, path: t.webPath })),
         series: series(p.series),
+        draft: p.draft,
       })),
     ),
   };
@@ -90,6 +92,7 @@ export const PostList = ({ posts, page, title: titleProp }: Props) => {
             <Link href="/[year]/[month]/[day]/[slug]" as={`/${post.path}`} scroll={false}>
               <a href={`/${post.path}`} className={styles.postTitleLink}>
                 {post.title}
+                {!post.draft ? null : ' (draft)'}
               </a>
             </Link>
           </h2>

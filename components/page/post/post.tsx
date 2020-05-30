@@ -20,6 +20,7 @@ type PostData = {
   readonly tags: readonly TagMeta[];
   readonly content: string;
   readonly series: null | readonly PostMeta[];
+  readonly draft: boolean;
 };
 
 type StaticProps = {
@@ -49,6 +50,7 @@ const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
       tags: post.tags.map((t) => ({ name: t.name, path: t.webPath })),
       content: await post.content,
       series: series(post.series),
+      draft: post.draft,
     },
   };
 };
@@ -64,6 +66,7 @@ export const BlogPost = ({ post }: StaticProps) => (
     >
       <h2 className={styles.title} itemProp="headline">
         {post.title}
+        {!post.draft ? null : ' (draft)'}
       </h2>
       <div className={styles.meta}>
         <time dateTime={post.date} className={styles.date} itemProp="datePublished">

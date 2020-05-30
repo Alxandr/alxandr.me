@@ -2,7 +2,6 @@ import { AbstractPostFile, slugify } from './fs';
 import { PostMeta, ProcessResult, process } from './process';
 
 import { DateTime } from 'luxon';
-import { ReactNode } from 'react';
 import { SeriesMeta } from './series';
 import { TagMeta } from './tags';
 import _ from 'lodash';
@@ -48,6 +47,10 @@ export class Post {
 
   get commentsIssue(): number | null {
     return this._meta.commentsIssue;
+  }
+
+  get draft(): boolean {
+    return this._file.isDraft;
   }
 
   private get processed(): Promise<ProcessResult> {
