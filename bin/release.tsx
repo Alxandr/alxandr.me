@@ -1,4 +1,4 @@
-import { findDrafts, postsDirectory } from '../server/blog';
+import { findDrafts, postsDirectory } from '../lib/blog';
 
 import { promises as fs } from 'fs';
 import mkdirp from 'mkdirp';

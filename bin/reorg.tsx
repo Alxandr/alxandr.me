@@ -1,12 +1,12 @@
-import { getPosts, postsDirectory } from '../server/blog';
-import { postWebPath, slugify } from '../server/blog/fs';
+import { getBlog, postsDirectory } from '../lib/blog';
+import { postWebPath, slugify } from '../lib/blog/fs';
 
 import { promises as fs } from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path';
 
 const main = async () => {
-  const posts = await getPosts();
+  const posts = await getBlog();
   for (const post of posts) {
     const webPath = postWebPath(post.date, slugify(post.title));
     if (webPath + '.md' === post.relPath) continue;
