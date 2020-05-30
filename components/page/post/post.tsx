@@ -1,6 +1,11 @@
+import { Blog, Post } from '@lib/blog';
+import { PostMeta, SeriesInfo } from './series';
+
+import { DateTime } from 'luxon';
 import { PageLayout } from '@layout/page';
-import { Post } from '@server/blog';
-import { ReactNode } from 'react';
+import { SeriesMeta } from '@lib/blog/series';
+import { Tags } from '@components/tags';
+import _ from 'lodash';
 import styles from './post.module.css';
 
 type TagMeta = {
@@ -12,15 +17,30 @@ type PostData = {
   readonly title: string;
   readonly date: string;
   readonly path: string;
-  readonly tags: TagMeta[];
+  readonly tags: readonly TagMeta[];
   readonly content: string;
+  readonly series: null | readonly PostMeta[];
 };
 
 type StaticProps = {
   post: PostData;
 };
 
-const getStaticProps = async (post: Post): Promise<StaticProps> => {
+const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
+  const series = (series: SeriesMeta | null) => {
+    if (!series) return null;
+    const posts = blog.series.bySlug(series.slug)!;
+    const reversed = _.reverse([...posts]);
+
+    // We ignore series with only 1 entry
+    if (reversed.length < 2) return null;
+
+    return reversed.map((p) => ({
+      title: p.title,
+      path: p.webPath,
+    }));
+  };
+
   return {
     post: {
       title: post.title,
@@ -28,14 +48,32 @@ const getStaticProps = async (post: Post): Promise<StaticProps> => {
       path: post.webPath,
       tags: post.tags.map((t) => ({ name: t.name, path: t.webPath })),
       content: await post.content,
+      series: series(post.series),
     },
   };
 };
 
 export const BlogPost = ({ post }: StaticProps) => (
   <PageLayout title={[post.title]}>
-    <h2>{post.title}</h2>
-    <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+    <article
+      className={styles.post}
+      itemProp="blogPost"
+      itemScope
+      itemType="http://schema.org/BlogPosting"
+      itemID={`https://alxandr.me/${post.path}`}
+    >
+      <h2 className={styles.title} itemProp="headline">
+        {post.title}
+      </h2>
+      <div className={styles.meta}>
+        <time dateTime={post.date} className={styles.date} itemProp="datePublished">
+          {DateTime.fromISO(post.date, { locale: 'en-US' }).toLocaleString(DateTime.DATE_MED)}
+        </time>
+        <Tags tags={post.tags} className={styles.tags} itemProp="keywords" />
+      </div>
+      <SeriesInfo posts={post.series} current={post.path} />
+      <section className={styles.content} dangerouslySetInnerHTML={{ __html: post.content }} itemProp="articleBody" />
+    </article>
   </PageLayout>
 );
 

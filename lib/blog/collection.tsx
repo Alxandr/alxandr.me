@@ -3,6 +3,7 @@ import { PostMeta, ProcessResult, process } from './process';
 
 import { DateTime } from 'luxon';
 import { ReactNode } from 'react';
+import { SeriesMeta } from './series';
 import { TagMeta } from './tags';
 import _ from 'lodash';
 
@@ -41,7 +42,7 @@ export class Post {
     return this._meta.tags;
   }
 
-  get series(): string | null {
+  get series(): SeriesMeta | null {
     return this._meta.series;
   }
 
@@ -141,5 +142,47 @@ export class TagCollection implements Iterable<Tag> {
 
   bySlug(slug: string): Tag | null {
     return this._tags.find((tag) => tag.slug === slug) ?? null;
+  }
+}
+
+export class Series extends PostCollection {
+  private readonly _meta: SeriesMeta;
+
+  constructor(meta: SeriesMeta, posts: PostCollection) {
+    super(posts);
+
+    this._meta = meta;
+  }
+
+  get name(): string {
+    return this._meta.name;
+  }
+
+  get slug(): string {
+    return this._meta.slug;
+  }
+
+  get webPath(): string {
+    return this._meta.webPath;
+  }
+}
+
+export class SeriesCollection implements Iterable<Series> {
+  private readonly _series: readonly Series[];
+
+  constructor(series: readonly Series[]) {
+    this._series = series;
+  }
+
+  [Symbol.iterator](): Iterator<Series> {
+    return this._series[Symbol.iterator]();
+  }
+
+  byName(name: string): Series | null {
+    return this._series.find((tag) => tag.name === name) ?? null;
+  }
+
+  bySlug(slug: string): Series | null {
+    return this._series.find((tag) => tag.slug === slug) ?? null;
   }
 }

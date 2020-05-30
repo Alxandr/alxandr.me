@@ -1,14 +1,7 @@
 import React, { ReactNode, memo, useMemo } from 'react';
 
 import Link from 'next/link';
-
-type MaybeOmit<T, K extends string | number | symbol, B extends boolean> = B extends false ? Omit<T, K> : T;
-
-type PropsForTag<T extends keyof JSX.IntrinsicElements, Children extends boolean = true> = MaybeOmit<
-  Omit<JSX.IntrinsicElements[T], 'key' | 'ref'>,
-  'children',
-  Children
->;
+import { PropsForTag } from './utils';
 
 interface TagMeta {
   readonly name: string;

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { SeriesMeta } from './series';
 import { TagMeta } from './tags';
 import downgradeHeaders from './downgrade-headers';
 import extractText from './extract-text';
@@ -50,7 +51,7 @@ type Meta = {
   readonly subTitle: string | null;
   readonly date: DateTime;
   readonly tags: readonly TagMeta[];
-  readonly series: string | null;
+  readonly series: SeriesMeta | null;
   readonly issue: number | null;
 };
 
@@ -73,7 +74,7 @@ export class PostMeta {
     return this._data.tags;
   }
 
-  get series(): string | null {
+  get series(): SeriesMeta | null {
     return this._data.series;
   }
 
@@ -122,8 +123,10 @@ export class PostMeta {
     const subTitle = optionalString('subTitle', data.subTitle);
     const date = requiredDate('date', data.date);
     const tags = optionalStringArray('tags', data.tags).map(TagMeta.create);
-    const series = optionalString('series', data.series);
+    const seriesName = optionalString('series', data.series);
     const issue = optionalNumber('issue', data.issue);
+
+    const series = seriesName === null ? null : SeriesMeta.create(seriesName);
 
     return new PostMeta({ title, subTitle, date, tags, series, issue });
   }

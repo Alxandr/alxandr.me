@@ -1,13 +1,19 @@
+import { Blog, PostCollection } from '@lib/blog';
+
 import { DateTime } from 'luxon';
 import Link from 'next/link';
 import { PageLayout } from '@layout/page';
-import { PostCollection } from '@server/blog/collection';
 import { Tags } from '@components/tags';
 import classNames from 'classnames';
 import styles from './post-list.module.css';
 import { useMemo } from 'react';
 
 type TagMeta = {
+  readonly name: string;
+  readonly path: string;
+};
+
+type SeriesMeta = {
   readonly name: string;
   readonly path: string;
 };
@@ -20,6 +26,7 @@ type PostMeta = {
   readonly excerptLong: string;
   readonly excerptShort: string;
   readonly tags: TagMeta[];
+  readonly series: SeriesMeta | null;
 };
 
 type StaticProps = {
@@ -30,6 +37,7 @@ type StaticProps = {
 
 const getStaticProps = async (
   posts: PostCollection,
+  blog: Blog,
   listRootPath: string,
   pagePathParam: string | null,
 ): Promise<StaticProps | string | null> => {
@@ -40,6 +48,11 @@ const getStaticProps = async (
     if (page < 2 || posts.pages === 1) return listRootPath;
     if (page > posts.pages) return `${listRootPath}/${posts.pages}`;
   }
+
+  const series = (series: import('@lib/blog/series').SeriesMeta | null): SeriesMeta | null => {
+    if (!series) return null;
+    return { name: series.name, path: series.webPath };
+  };
 
   return {
     page,
@@ -53,6 +66,7 @@ const getStaticProps = async (
         excerptLong: await p.excerptLong,
         excerptShort: await p.excerptShort,
         tags: p.tags.map((t) => ({ name: t.name, path: t.webPath })),
+        series: series(p.series),
       })),
     ),
   };

@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { getPost, getPosts } from '@server/blog';
+import { getBlog, getPost } from '@lib/blog';
 
 import { BlogPost } from '@components/page/post/post';
 import { PageLayout } from '@layout/page';
@@ -12,15 +12,15 @@ type Query = {
 };
 
 export const getStaticPaths: GetStaticPaths<Query> = async () => {
-  const posts = await getPosts();
+  const posts = await getBlog();
   const paths = [...posts].map((p) => `/${p.webPath}`);
   return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps<BlogPost.Props, Query> = async (ctx) => {
   const { year, month, day, slug } = ctx.params!;
-  const post = await getPost(year, month, day, slug);
-  return { props: await BlogPost.getStaticProps(post) };
+  const { post, blog } = await getPost(year, month, day, slug);
+  return { props: await BlogPost.getStaticProps(post, blog) };
 };
 
 export default (props: BlogPost.Props) => <BlogPost {...props} />;

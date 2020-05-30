@@ -19,7 +19,7 @@
     "paths": {
       "@layout/*": ["components/layout/*"],
       "@components/*": ["components/*"],
-      "@server/*": ["server/*"]
+      "@lib/*": ["lib/*"]
     }
   },
   "exclude": ["node_modules"],

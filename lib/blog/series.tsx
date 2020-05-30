@@ -1,13 +1,11 @@
-import { PostCollection } from './collection';
 import { slugify } from './fs';
 
 type Meta = {
   readonly name: string;
-  // readonly subTitle: string | null;
   readonly slug: string;
 };
 
-export class TagMeta {
+export class SeriesMeta {
   private readonly _data: Meta;
 
   private constructor(data: Meta) {
@@ -27,12 +25,12 @@ export class TagMeta {
   }
 
   get webPath(): string {
-    return `tag/${this._data.slug}`;
+    return `series/${this._data.slug}`;
   }
 
-  static create(name: string): TagMeta {
+  static create(name: string): SeriesMeta {
     const slug = slugify(name);
 
-    return new TagMeta({ name, slug });
+    return new SeriesMeta({ name, slug });
   }
 }
