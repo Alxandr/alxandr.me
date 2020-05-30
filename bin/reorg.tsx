@@ -6,7 +6,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 
 const main = async () => {
-  const posts = await getBlog();
+  const posts = await getBlog({ includeDrafts: false });
   for (const post of posts) {
     const webPath = postWebPath(post.date, slugify(post.title));
     if (webPath + '.md' === post.relPath) continue;

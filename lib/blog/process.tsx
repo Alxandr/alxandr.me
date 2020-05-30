@@ -38,10 +38,10 @@ export type ProcessResult = {
   readonly excerptShort: string;
 };
 
-export const readPostMeta = (text: string, file: string) => {
+export const readPostMeta = (text: string, file: string, draft: boolean) => {
   const parsed = frontMatter(text);
   return {
-    meta: PostMeta.create(parsed.data, file),
+    meta: PostMeta.create(parsed.data, file, draft),
     content: parsed.content,
   };
 };
@@ -82,13 +82,23 @@ export class PostMeta {
     return this._data.issue;
   }
 
-  static create(data: any, file: string): PostMeta {
+  static create(data: any, file: string, draft: boolean): PostMeta {
+    const today = () => {
+      const now = new Date();
+      return DateTime.fromObject({
+        year: now.getFullYear(),
+        month: now.getMonth() + 1,
+        day: now.getDate(),
+      });
+    };
+
     const requiredString = (name: string, value: unknown) => {
       if (typeof value !== 'string' || value.length === 0) throw new Error(`${name} is required in file ${file}`);
       return value;
     };
 
-    const requiredDate = (name: string, value: unknown) => {
+    const requiredDate = (name: string, value: unknown, draft: boolean) => {
+      if (!value && draft) return today();
       if (typeof value !== 'string' || value.length === 0) throw new Error(`${name} is required in file ${file}`);
       const date = DateTime.fromISO(value, { zone: 'utc', locale: 'en-US' });
       const { invalidExplanation } = date;
@@ -121,7 +131,7 @@ export class PostMeta {
 
     const title = requiredString('title', data.title);
     const subTitle = optionalString('subTitle', data.subTitle);
-    const date = requiredDate('date', data.date);
+    const date = requiredDate('date', data.date, draft);
     const tags = optionalStringArray('tags', data.tags).map(TagMeta.create);
     const seriesName = optionalString('series', data.series);
     const issue = optionalNumber('issue', data.issue);

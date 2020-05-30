@@ -28,16 +28,20 @@ const mapMap = <K, V, U>(map: Map<K, V>, mapper: (value: V) => U) => {
   return result;
 };
 
-export const getBlog = async () => {
-  const allFiles = await findPosts();
+export type BlogOpts = {
+  readonly includeDrafts: boolean;
+};
+
+export const getBlog = async ({ includeDrafts }: BlogOpts) => {
+  const allFiles = await findPosts(includeDrafts);
   const allPosts = await Promise.all(allFiles.map(readPost));
 
   return new Blog(allPosts);
 };
 
-export const getPost = async (year: string, month: string, day: string, slug: string) => {
-  const file = await findPost(year, month, day, slug);
-  const blog = await getBlog();
+export const getPost = async (year: string, month: string, day: string, slug: string, opts: BlogOpts) => {
+  const file = await findPost(year, month, day, slug, opts.includeDrafts);
+  const blog = await getBlog(opts);
   let post = null;
   for (const p of blog) {
     if (p.webPath === file.webPath) {
@@ -51,7 +55,7 @@ export const getPost = async (year: string, month: string, day: string, slug: st
 
 const readPost = async (file: AbstractPostFile): Promise<Post> => {
   const content = await file.read();
-  const meta = readPostMeta(content, file.webPath);
+  const meta = readPostMeta(content, file.webPath, file.isDraft);
 
   return new Post(file, meta.meta, meta.content);
 };

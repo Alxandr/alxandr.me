@@ -9,7 +9,9 @@ type Query = {
 };
 
 export const getStaticPaths: GetStaticPaths<Query> = async () => {
-  const posts = await getBlog();
+  const posts = await getBlog({
+    includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
+  });
   const paths = [...posts.tags].map((tag) => `/${tag.webPath}`);
   return { paths, fallback: false };
 };
@@ -20,7 +22,9 @@ interface Props extends PostList.Props {
 
 export const getStaticProps: GetStaticProps<Props, Query> = async (ctx) => {
   const { tag: tagSlug } = ctx.params!;
-  const blog = await getBlog();
+  const blog = await getBlog({
+    includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
+  });
   const tag = blog.tags.bySlug(tagSlug);
   if (!tag) throw new Error(`not found`);
   const props = await PostList.getStaticProps(tag, blog, `/${tag.webPath}`, null);

@@ -12,14 +12,18 @@ type Query = {
 };
 
 export const getStaticPaths: GetStaticPaths<Query> = async () => {
-  const posts = await getBlog();
+  const posts = await getBlog({
+    includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
+  });
   const paths = [...posts].map((p) => `/${p.webPath}`);
   return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps<BlogPost.Props, Query> = async (ctx) => {
   const { year, month, day, slug } = ctx.params!;
-  const { post, blog } = await getPost(year, month, day, slug);
+  const { post, blog } = await getPost(year, month, day, slug, {
+    includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
+  });
   return { props: await BlogPost.getStaticProps(post, blog) };
 };
 

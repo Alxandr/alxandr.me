@@ -12,7 +12,7 @@ export const draftsDirectory = path.resolve(postsDirectory, 'drafts');
 
 export const postWebPath = (date: DateTime, slug: string) => `${date.toFormat('yyyy/MM/dd')}/${slug}`;
 
-export const findPosts = async () => {
+export const findPosts = async (includeDrafts: boolean) => {
   const ret: PostFile[] = [];
   const files = await glob('*/*/*/*.md', { cwd: postsDirectory });
   for (const file of files) {
@@ -32,10 +32,26 @@ export const findPosts = async () => {
     ret.push(new PostFile(fullPath, webPath, date));
   }
 
+  if (includeDrafts) {
+    const now = new Date();
+    const today = DateTime.fromObject({
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    });
+    const drafts = await findDrafts();
+    for (const draft of drafts) {
+      const date = draft.date ?? today;
+      const webPath = postWebPath(date, draft.slug);
+
+      ret.push(new PostFile(draft.fullPath, webPath, date, true));
+    }
+  }
+
   return ret;
 };
 
-export const findPost = async (year: string, month: string, day: string, slug: string) => {
+export const findPost = async (year: string, month: string, day: string, slug: string, includeDrafts: boolean) => {
   const expected = path.resolve(postsDirectory, year, month, day, slug + '.md');
   try {
     await fs.access(expected, F_OK);
@@ -47,8 +63,26 @@ export const findPost = async (year: string, month: string, day: string, slug: s
     });
     return new PostFile(expected, postWebPath(date, slug), date);
   } catch (e) {
+    if (includeDrafts) {
+      const draft = await findDraftPost(slug);
+      if (draft) {
+        const date =
+          draft.date ??
+          DateTime.fromObject({
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1,
+            day: new Date().getDate(),
+          });
+        return new PostFile(draft.fullPath, postWebPath(date, draft.slug), date);
+      }
+    }
     throw new Error(`File: ${expected} does not exist`);
   }
+};
+
+const findDraftPost = async (slug: string) => {
+  const drafts = await findDrafts();
+  return drafts.find((d) => d.slug === slug);
 };
 
 export abstract class AbstractPostFile {
@@ -73,6 +107,8 @@ export abstract class AbstractPostFile {
     return this._webPath;
   }
 
+  abstract get isDraft(): boolean;
+
   read(): Promise<string> {
     return fs.readFile(this.fullPath, 'utf-8');
   }
@@ -85,11 +121,13 @@ export interface IPostFile {
 
 class PostFile extends AbstractPostFile {
   private readonly _date: DateTime;
+  private readonly _draft: boolean;
 
-  constructor(fullPath: string, webPath: string, date: DateTime) {
+  constructor(fullPath: string, webPath: string, date: DateTime, isDraft: boolean = false) {
     super(fullPath, webPath);
 
     this._date = date;
+    this._draft = isDraft;
   }
 
   get date(): DateTime {
@@ -97,7 +135,7 @@ class PostFile extends AbstractPostFile {
   }
 
   get isDraft(): boolean {
-    return false;
+    return this._draft;
   }
 }
 
