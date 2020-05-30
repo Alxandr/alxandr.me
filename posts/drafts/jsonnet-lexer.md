@@ -5,11 +5,11 @@ series: rust-jsonnet
 issue: 43
 ---
 
-For a while now, I've been working on a rust implementation of a interpreter (and maybe if I get to it, a jitter) of the [jsonnet] language. I've written serveral parsers (and lexers), and used several different iterations of both AST and the core language, though I've never gotten as far as to actually implement the interpretation part. However, at this point in time, I'm reasonably happy with how the parser works for once, and I'm also somewhat confident that it works reasonably well. After all, it managed to parse the jsonnet [stdlib] (which is written in jsonnet). Given how much work I've put into this (and how dead my blog has been for a few years), I figured I should put some more work into it and write about my experiences. Maybe also try to cultivate the habbit of writing more. Regardless, having fixed my blog (it sort of vannished for a year 😅) it's about time I use it.
+For a while now, I've been working on a rust implementation of an interpreter (and maybe if I get to it, a jitter) of the [jsonnet] language. I've written serveral parsers (and lexers), and used several different iterations of both AST and the core language, though I've never gotten as far as to actually implement the interpretation part. However, at this point in time, I'm reasonably happy with how the parser works for once, and I'm also somewhat confident that it works reasonably well. After all, it managed to parse the jsonnet [stdlib] (which is written in jsonnet). Given how much work I've put into this interpreter, and how dead my blog has been for a few years, I figured I'd make a post and write about my experiences. Regardless, having fixed my blog (it sort of vannished for a year 😅) it's about time I use it.
 
 # Architecture
 
-The architecture of the jsonnet interpreter is one of the things I've written the most of, and scrapped the most of. In the begining, I started with a single crate, with a messy recursive decent parser that produced AST directly. It bailed on any and all errors, and was quite hard to figure out. This was based on me trying to more or less directly port the [go implementation] of jsonnet. I quickly realized that was not the way to go, given that I was having trouble understanding it myself, and I just wrote it after all. So I set out to switch out the parser with one based on rust traits instead of using giant functions. So I went and stole a bunch of code from [syn] to do parsing, and that actually worked out quite nice. This allowed for writing some really neat parse implementations like the following:
+The architecture of the jsonnet interpreter is one of the things I've written the most of, and scrapped the most of. In the beginning, I started with a single crate, with a hard to follow recursive decent parser that produced AST directly. It bailed on any and all errors, and was quite hard to figure out. This was based on me trying to more or less directly port the [go implementation] of jsonnet. I quickly realized that was not the way to go, given that I was having trouble understanding it myself, and I just wrote it after all. So I set out to switch out the parser with one based on rust traits instead of using giant functions. So I went and stole a bunch of code from [syn] to do parsing, and that actually worked out quite nice. This allowed for writing some really neat parse implementations like the following:
 
 ```rust
 impl Parse for ArgNamed {
@@ -23,24 +23,24 @@ impl Parse for ArgNamed {
 }
 ```
 
-It was easy to read, it was easy to write, and it was easy to follow. But it still had some issues, and it was fairly incompatible with one of the goals I had with this project, which was supporting more than 1 error output. A parser that just dies on the first error is mostly fine for a command line utility, but if you want to plug it into an editor of some kind, it's pretty bad. And I'd argue it's mostly bad for command line as well as it produces a check -> fix -> verify loop that's too long. It's not like this couldn't be fixed. The `Result::Err` variant here contains a list of errors after all, but it's the convinience of the `?`-operator that makes it inpractical ironically enough. So I rewrote it, again. However, before writing the parser for the third time, I decided I was going to do some actual research before just blindly writing code this time. And this lead me to the [Rust Analyzer].
+It was easy to read, it was easy to write, and it was easy to follow. But it still had some issues, and it was fairly incompatible with one of the goals I had with this project, which was supporting more than 1 error output. A parser that just dies on the first error is mostly fine for a command line utility, but if you want to plug it into an editor of some kind, it's pretty bad. And I'd argue it's mostly bad for command line as well as it produces a check -> fix -> verify loop that's too long. It's not like this couldn't be fixed. The `Result::Err` variant here contains a list of errors after all, but it's the convenience of the `?`-operator that makes it impractical ironically enough. So I rewrote it, again. However, before writing the parser for the third time, I decided I was going to do some actual research before just blindly writing code this time. And this lead me to the [Rust Analyzer].
 
 # A peek into the mind of matklad
 
 As it turns out, if one starts to read about parsers, syntax trees, and the likes in rust, one pretty quickly comes over either code or posts written by [matklad]. After all, one of the posts that got this whole project started is his [post on pratt parsing in rust][pratt parsing]. And that's just one of the posts. I've drawn inspiration from at least the following (and these are just the ones I can remember after the fact):
 
-* [pratt parsing]
-* [rust interner]
-* [parse_tree]
-* [fall]
-* [rowan]
-* [Rust Analyzer]
+- [pratt parsing]
+- [rust interner]
+- [parse_tree]
+- [fall]
+- [rowan]
+- [Rust Analyzer]
 
-Now, I fully acknowledge that he might not have done all of this by himself, but still, I'm pretty sure there's noone (except me) else who've had a bigger impact on how this project ended up being structured. A lot of the ideas for how to split up and implemnet the differnt parts of the jsonnet interpreter (or for now, parser) is taken pretty much directly from [Rust Analyzer] itself.
+Now, I fully acknowledge that he might not have done all of this by himself, but still, I'm pretty sure there's noone (except me) else who've had a bigger impact on how this project ended up being structured. A lot of the ideas for how to split up and implement the different parts of the jsonnet interpreter (or for now, parser) is taken pretty much directly from [Rust Analyzer] itself.
 
 # Concrete syntax trees (parse trees)
 
-A big change on how I did the parsing was moving from creating abstract syntax trees directly from the parser, to instead producing concrete syntax trees (or parse trees). Appologies if the terminology is incorrect here, as I'm definitely not an expert on the subject, but the idea is that instead of taking an expression like `a + b`, and producing something like `Add(Ident(a), Ident(b))`, we instead produce a tree that contains all of the original source, including whitespace, comments and errors. Another big difference is that instead of producing either a tree, or one or more errors, we always produce a tree, regardless of how bad the input is. We then also produce diagnostics[^1] (errors or warnings for instance) and attach them to certain spans in the tree (allowing for an editor to show squigelies for instance[^2]). How this is implemented, however, will be explained in a later post in this series.
+A big change on how I did the parsing was moving from creating abstract syntax trees directly from the parser, to instead producing concrete syntax trees (or parse trees). Apologies if the terminology is incorrect here, as I'm definitely not an expert on the subject, but the idea is that instead of taking an expression like `a + b`, and producing something like `Add(Ident(a), Ident(b))`, we instead produce a tree that contains all of the original source, including whitespace, comments and errors. Another big difference is that instead of producing either a tree, or one or more errors, we always produce a tree, regardless of how bad the input is. We then also produce diagnostics[^1] (errors or warnings for instance) and attach them to certain spans in the tree (allowing for an editor to show squigelies for instance[^2]). How this is implemented, however, will be explained in a later post in this series.
 
 # Lexer
 
@@ -75,7 +75,7 @@ struct Token<'a> {
 }
 ```
 
-While neither one of these approaches are actually what I eneded up using (I stole the design I ended up going with from [Rust Analyzer]) these two approaches still illustrates the main difference. One of these puts more logic upfront in the parser, but allows the parser to do fancy things like unescaping strings (hence `String`, and not `&str` in the `Ident`[^5] case). One of the downsides is that tokens are typically a bit fatter, after all, they have to potentially carry a `String`. In the example above, definint `Span` as `(u32, u32)`, `Token` in the first approach is 40 bytes alligned, compared to 32 bytes alligned for the second approach. However, considering we're producing tokens for *every* part of the source file, there's one more optimization we can do (which also moves some of the work to later in the processing pipeline): We can get rid of the `text`, and `span`, instead only giving out a length of the parsed token. The caller that started the lexing should have the string it used to do so, and it can sum together the lengths the lexer emits to get the start and end of any given token. As such, the final `Token` structure looks like this:
+While neither one of these approaches are actually what I eneded up using (I stole the design I ended up going with from [Rust Analyzer]) these two approaches still illustrates the main difference. One of these puts more logic upfront in the parser, but allows the parser to do fancy things like unescaping strings (hence `String`, and not `&str` in the `Ident`[^5] case). One of the downsides is that tokens are typically a bit fatter, after all, they have to potentially carry a `String`. In the example above, definint `Span` as `(u32, u32)`, `Token` in the first approach is 40 bytes alligned, compared to 32 bytes alligned for the second approach. However, considering we're producing tokens for _every_ part of the source file, there's one more optimization we can do (which also moves some of the work to later in the processing pipeline): We can get rid of the `text`, and `span`, instead only giving out a length of the parsed token. The caller that started the lexing should have the string it used to do so, and it can sum together the lengths the lexer emits to get the start and end of any given token. As such, the final `Token` structure looks like this:
 
 ```rust
 enum TokenKind {
@@ -87,7 +87,7 @@ enum TokenKind {
 struct Token {
   /// The kind of token.
   pub kind: TokenKind,
-  
+
   /// The token value.
   pub len: u32,
 }
@@ -340,7 +340,7 @@ Last on our list of valid non-trivia tokens is strings. As explained earlier, st
   StringBlock(StringBlockToken),
 ```
 
-I'm not going to lie, I had help writing those regexes. And I'm not entirely sure I can even explain *why* they work, but they appear to do so (this is why we write unit tests, right?). [Jsonnet] has 5 different string represntations:
+I'm not going to lie, I had help writing those regexes. And I'm not entirely sure I can even explain _why_ they work, but they appear to do so (this is why we write unit tests, right?). [Jsonnet] has 5 different string represntations:
 
 1. Normal double quoted strings: `"hello\"world"`.
 
@@ -352,7 +352,7 @@ I'm not going to lie, I had help writing those regexes. And I'm not entirely sur
 
 5. Block string:
 
-   ```
+   ```jsonnet
    |||
      hello"world
    |||
@@ -385,15 +385,15 @@ And with that, we've handled all of the non-trivia tokens in [Jsonnet].
 
 [Jsonnet] supports the following kind of trivia:
 
-* Single-line c-like comments: `// comment`.
-* Single-line python-like comments: `# comment`.
-* Multi-line c-like comments: `/* comment */`.
-* Whitespace: any amount of space (` `), tab (`\t`), linefeed (`\n`) and carriage return (`\r`).
+- Single-line c-like comments: `// comment`.
+- Single-line python-like comments: `# comment`.
+- Multi-line c-like comments: `/* comment */`.
+- Whitespace: any amount of space (``), tab (`\t`), linefeed (`\n`) and carriage return (`\r`).
 
 There are also a couple of error cases:
 
-* Unterminated multiline comments.
-* Too short multiline comments (`/*/`). Note that because [logos] prefers longer tokens, this will only be the case if the comment isn't closed later.
+- Unterminated multiline comments.
+- Too short multiline comments (`/*/`). Note that because [logos] prefers longer tokens, this will only be the case if the comment isn't closed later.
 
 Alltogether we have the following new `RawToken` variants:
 
@@ -426,24 +426,24 @@ The rest of the lexer is mostly a giant mapping between `RawToken`s and the expo
 [^1]: Currently, the jssonet parser only provides errors and no warnings, and the error-recovery is ... bad, but the infrastructure is there.
 [^2]: Editor integration is also a goal of this project. Don't know if I'll ever get there though, as that's further down on my priority list.
 [^3]: This is typically called "trivia", name taken from [roslyn] (as far as I know, but may very well have originated much earlier).
-[^4]: Not *exactly* exactly. I had to read some go code to figure out how to deal with string blocks.
+[^4]: Not _exactly_ exactly. I had to read some go code to figure out how to deal with string blocks.
 [^5]: Not really the case for identifiers typically, but definitely strings tends to need to be modified after parsing. For instance, the string `"\n"` should end up as not the two characters `\` and `n`, but instead as a single newline character.
-[^6]: I *might* make a separate post about that. I'm not sure yet.
+[^6]: I _might_ make a separate post about that. I'm not sure yet.
 
-[jsonnet]: https://jsonnet.org/ "Jsonnet website"
-[stdlib]: https://github.com/google/jsonnet/blob/master/stdlib/std.jsonnet "Jsonnet STD lib"
-[go implementation]: https://github.com/google/go-jsonnet "Jsonnet Go Implementation"
-[syn]: https://crates.io/crates/syn "syn crate"
-[Rust Analyzer]: https://rust-analyzer.github.io/ "rust analyser"
+[jsonnet]: https://jsonnet.org/ 'Jsonnet website'
+[stdlib]: https://github.com/google/jsonnet/blob/master/stdlib/std.jsonnet 'Jsonnet STD lib'
+[go implementation]: https://github.com/google/go-jsonnet 'Jsonnet Go Implementation'
+[syn]: https://crates.io/crates/syn 'syn crate'
+[rust analyzer]: https://rust-analyzer.github.io/ 'rust analyser'
 [matklad]: https://matklad.github.io/ "matklad (Aleksey Kladov)'s blog"
-[pratt parsing]: https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html "Simple but Powerful Pratt Parsing - matklad"
-[parse_tree]: https://github.com/matklad/parse_tree "A library for non-abstract parse trees."
-[fall]: https://github.com/matklad/fall "Fall: Not Yet Another Parser Generator"
-[rowan]: https://github.com/rust-analyzer/rowan "Rowan - a library for lossless syntax trees"
-[rust interner]: https://matklad.github.io/2020/03/22/fast-simple-rust-interner.html "Fast and Simple Rust Interner - matklad"
-[roslyn]: https://github.com/dotnet/roslyn "The Roslyn .NET compiler provides C# and Visual Basic languages with rich code analysis APIs."
-[Jsonnet spec]: https://jsonnet.org/ref/spec.html "Jsonnet Specification"
-[logos]: https://crates.io/crates/logos "Logos - Create ridiculously fast Lexers"
-[JSON spec]: http://json.org/ "JSON specification"
-[lexer source]: https://github.com/YoloDev/yolodev-jsonnet/blob/58cf0a50050849831e64a56984423e65695eb23e/crates/lex/src/lib.rs "Jsonnet lexer source"
-[github issue]: https://github.com/Alxandr/alxandr.me/issues/43 "Comments: Rust Jsonnet: Lexer"
+[pratt parsing]: https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html 'Simple but Powerful Pratt Parsing - matklad'
+[parse_tree]: https://github.com/matklad/parse_tree 'A library for non-abstract parse trees.'
+[fall]: https://github.com/matklad/fall 'Fall: Not Yet Another Parser Generator'
+[rowan]: https://github.com/rust-analyzer/rowan 'Rowan - a library for lossless syntax trees'
+[rust interner]: https://matklad.github.io/2020/03/22/fast-simple-rust-interner.html 'Fast and Simple Rust Interner - matklad'
+[roslyn]: https://github.com/dotnet/roslyn 'The Roslyn .NET compiler provides C# and Visual Basic languages with rich code analysis APIs.'
+[jsonnet spec]: https://jsonnet.org/ref/spec.html 'Jsonnet Specification'
+[logos]: https://crates.io/crates/logos 'Logos - Create ridiculously fast Lexers'
+[json spec]: http://json.org/ 'JSON specification'
+[lexer source]: https://github.com/YoloDev/yolodev-jsonnet/blob/58cf0a50050849831e64a56984423e65695eb23e/crates/lex/src/lib.rs 'Jsonnet lexer source'
+[github issue]: https://github.com/Alxandr/alxandr.me/issues/43 'Comments: Rust Jsonnet: Lexer'

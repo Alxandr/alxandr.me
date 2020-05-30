@@ -5,8 +5,9 @@ import downgradeHeaders from './downgrade-headers';
 import extractText from './extract-text';
 import footnotes from 'remark-footnotes';
 import frontMatter from 'gray-matter';
+import highlight from '../highlighting/highlight';
 import markdown from 'remark-parse';
-import prismHighlight from '@mapbox/rehype-prism';
+//import prismHighlight from '@mapbox/rehype-prism';
 import { prune } from './prune';
 import rehype2html from 'rehype-stringify';
 import remark2rehype from 'remark-rehype';
@@ -18,7 +19,7 @@ const processor = unified()
   .use(extractText)
   .use(remark2rehype)
   .use(downgradeHeaders)
-  .use(prismHighlight)
+  .use(highlight)
   .use(rehype2html)
   .freeze();
 
