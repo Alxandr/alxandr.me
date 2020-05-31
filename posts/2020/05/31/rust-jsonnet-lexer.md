@@ -3,6 +3,7 @@ title: 'Rust Jsonnet: Lexer'
 tags: ['rust', 'jsonnet', 'lexing', 'parsing']
 series: rust-jsonnet
 issue: 43
+date: '2020-05-31'
 ---
 
 For a while now, I've been working on a rust implementation of an interpreter (and maybe if I get to it, a jitter) of the [jsonnet] language. I've written serveral parsers (and lexers), and used several different iterations of both AST and the core language, though I've never gotten as far as to actually implement the interpretation part. However, at this point in time, I'm reasonably happy with how the parser works for once, and I'm also somewhat confident that it works reasonably well. After all, it managed to parse the jsonnet [stdlib] (which is written in jsonnet). Given how much work I've put into this interpreter, and how dead my blog has been for a few years, I figured I'd make a post and write about my experiences. Regardless, having fixed my blog (it sort of vannished for a year 😅) it's about time I use it.

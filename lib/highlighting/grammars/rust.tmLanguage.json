@@ -1,4 +1,10 @@
 {
+  "information_for_contributors": [
+    "This file has been converted from https://github.com/zargony/atom-language-rust/blob/master/grammars/rust.cson",
+    "If you want to provide a fix or improvement, please create a pull request against the original repository.",
+    "Once accepted there, we are happy to receive an update request."
+  ],
+  "version": "https://github.com/zargony/atom-language-rust/commit/7d59e2ad79fbe5925bd2fd3bd3857bf9f421ff6f",
   "name": "Rust",
   "scopeName": "source.rust",
   "patterns": [
@@ -75,13 +81,8 @@
     {
       "comment": "Attribute",
       "name": "meta.attribute.rust",
-      "begin": "#\\!?\\[(\\w*)",
+      "begin": "#\\!?\\[",
       "end": "\\]",
-      "captures": {
-        "1": {
-          "name": "entity.name.function.attribute.rust"
-        }
-      },
       "patterns": [
         {
           "include": "#string_literal"
@@ -164,7 +165,7 @@
     {
       "comment": "Keyword",
       "name": "keyword.other.rust",
-      "match": "\\b(crate|extern|mod|let|ref|use|super|move|as)\\b"
+      "match": "\\b(crate|extern|mod|let|ref|use|super|move)\\b"
     },
     {
       "comment": "Reserved keyword",
@@ -207,7 +208,7 @@
     {
       "comment": "Miscellaneous operator",
       "name": "keyword.operator.misc.rust",
-      "match": "(=>|::|\\?)"
+      "match": "(=>|::|\\bas\\b)"
     },
     {
       "comment": "Comparison operator",
@@ -586,24 +587,29 @@
     "lifetime": {
       "comment": "Named lifetime",
       "name": "storage.modifier.lifetime.rust",
-      "match": "'([a-zA-Z_][a-zA-Z0-9_]*)\\b"
+      "match": "'([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": {
+          "name": "entity.name.lifetime.rust"
+        }
+      }
     },
     "ref_lifetime": {
       "comment": "Reference with named lifetime",
-      "match": "(&)('[a-zA-Z_][a-zA-Z0-9_]*)\\b",
+      "match": "&('([a-zA-Z_][a-zA-Z0-9_]*))\\b",
       "captures": {
         "1": {
-          "name": "keyword.operator.sigil.rust"
+          "name": "storage.modifier.lifetime.rust"
         },
         "2": {
-          "name": "storage.modifier.lifetime.rust"
+          "name": "entity.name.lifetime.rust"
         }
       }
     },
     "core_types": {
       "comment": "Built-in/core type",
-      "name": "support.type.primitive.rust",
-      "match": "\\b(bool|char|usize|isize|u8|u16|u32|u64|u128|i8|i16|i32|i64|i128|f32|f64|str|Self)\\b"
+      "name": "storage.type.core.rust",
+      "match": "\\b(bool|char|usize|isize|u8|u16|u32|u64|u128|i8|i16|i32|i64|i128|f32|f64|str|Self|Option|Result)\\b"
     },
     "core_vars": {
       "comment": "Core type variant",
@@ -612,22 +618,22 @@
     },
     "core_marker": {
       "comment": "Core trait (marker)",
-      "name": "entity.name.type.marker.rust",
+      "name": "support.type.marker.rust",
       "match": "\\b(Copy|Send|Sized|Sync)\\b"
     },
     "core_traits": {
       "comment": "Core trait",
-      "name": "entity.name.type.core.rust",
+      "name": "support.type.core.rust",
       "match": "\\b(Drop|Fn|FnMut|FnOnce|Clone|PartialEq|PartialOrd|Eq|Ord|AsRef|AsMut|Into|From|Default|Iterator|Extend|IntoIterator|DoubleEndedIterator|ExactSizeIterator)\\b"
     },
     "std_types": {
       "comment": "Standard library type",
-      "name": "entity.name.type.class.std.rust",
-      "match": "\\b(Box|String|Vec|Path|PathBuf|Option|Result)\\b"
+      "name": "storage.class.std.rust",
+      "match": "\\b(Box|String|Vec|Path|PathBuf)\\b"
     },
     "std_traits": {
       "comment": "Standard library trait",
-      "name": "entity.name.type.std.rust",
+      "name": "support.type.std.rust",
       "match": "\\b(ToOwned|ToString)\\b"
     },
     "type": {

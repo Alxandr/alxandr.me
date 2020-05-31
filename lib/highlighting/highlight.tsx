@@ -51,6 +51,12 @@ const grammars = (() => {
       scopeName: 'source.cs',
       definitionFile: 'csharp.tmLanguage.json',
     },
+    {
+      name: 'Markdown',
+      shortNames: ['markdown', 'md'],
+      scopeName: 'text.html.markdown',
+      definitionFile: 'markdown.tmLanguage.json',
+    },
   ];
 
   const langs = new Map<string, Grammar>();
