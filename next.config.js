@@ -21,7 +21,7 @@ module.exports = (phase /*: string */) => {
 
   const env = {
     INCLUDE_DRAFTS: includeDrafts ? 'true' : 'false',
-    GA_TRACKING_ID: isProd ? process.env.GA_TRACKING_ID : '',
+    GA_TRACKING_ID: !isDev ? process.env.GA_TRACKING_ID : '',
   };
 
   return withFonts({ env });

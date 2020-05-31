@@ -24,12 +24,14 @@ Router.events.on('routeChangeStart', () => {
 Router.events.on('routeChangeComplete', (url: string) => {
   NProgress.done();
   maybeScrollToContent(url);
-  setTimeout(() => {
-    (window as any).gtag('config', process.env.GA_TRACKING_ID, {
-      page_location: url,
-      page_title: document.title,
-    });
-  }, 0);
+  if (process.env.GA_TRACKING_ID) {
+    setTimeout(() => {
+      (window as any).gtag('config', process.env.GA_TRACKING_ID, {
+        page_location: url,
+        page_title: document.title,
+      });
+    }, 0);
+  }
 });
 
 Router.events.on('routeChangeError', (err, url) => {
