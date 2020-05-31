@@ -24,7 +24,7 @@ gtag('config', '${trackingId}');
 class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <GaTag trackingId={process.env.GA_TRACKING_ID} />
         </Head>
