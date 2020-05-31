@@ -5,12 +5,25 @@ const GaTag = ({ trackingId }: { trackingId: string | undefined }) => {
 
   return (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`} />
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}></script>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '${trackingId}');
+          `,
+        }}
+      ></script>
+
+      {/* <script async src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`} />
       <script
         dangerouslySetInnerHTML={{
           __html: `(a=>{const n=a.dataLayer=a.dataLayer||[],t=(...a)=>n.push(a);t("js",new Date),t("config","${trackingId}"),window.gtag=t})(window);`,
         }}
-      />
+      /> */}
     </>
   );
 };
