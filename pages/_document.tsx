@@ -17,13 +17,6 @@ gtag('config', '${trackingId}');
           `,
         }}
       ></script>
-
-      {/* <script async src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`} />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(a=>{const n=a.dataLayer=a.dataLayer||[],t=(...a)=>n.push(a);t("js",new Date),t("config","${trackingId}"),window.gtag=t})(window);`,
-        }}
-      /> */}
     </>
   );
 };
