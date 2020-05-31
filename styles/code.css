@@ -102,88 +102,216 @@ pre[class*='language-']::after {
   transform: rotate(2deg);
 }
 
-.token.comment,
-.token.block-comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: #7d8b99;
-}
-
-.token.punctuation {
-  color: #5f6364;
-}
-
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.function-name,
-.token.constant,
-.token.symbol,
-.token.deleted {
-  color: #c92c2c;
-}
-
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.function,
-.token.builtin,
-.token.inserted {
-  color: #2f9c0a;
-}
-
-.token.operator,
-.token.entity,
-.token.url,
-.token.variable {
-  color: #a67f59;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.token.atrule,
-.token.attr-value,
-.token.keyword,
-.token.class-name {
-  color: #1990b8;
-}
-
-.token.regex,
-.token.important {
-  color: #e90;
-}
-
-.language-css .token.string,
-.style .token.string {
-  color: #a67f59;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.token.important {
-  font-weight: normal;
-}
-
-.token.bold {
-  font-weight: bold;
-}
-.token.italic {
-  font-style: italic;
-}
-
-.token.entity {
-  cursor: help;
-}
-
-.token.namespace {
-  opacity: 0.7;
-}
-
 @media screen and (max-width: 767px) {
   pre[class*='language-']::before,
   pre[class*='language-']::after {
     bottom: 14px;
     box-shadow: none;
+  }
+}
+
+pre[class*='language-'] {
+  .meta-embedded,
+  .source-groovy-embedded {
+    color: #000000ff;
+  }
+  .emphasis {
+    font-style: italic;
+  }
+  .strong {
+    font-weight: bold;
+  }
+  .meta-diff-header {
+    color: #000080;
+  }
+  .comment {
+    color: #008000;
+  }
+  .constant-language {
+    color: #0000ff;
+  }
+  .constant-numeric,
+  .entity-name-operator-custom-literal-number,
+  .variable-other-enummember,
+  .keyword-operator-plus-exponent,
+  .keyword-operator-minus-exponent {
+    color: #098658;
+  }
+  .constant-regexp {
+    color: #811f3f;
+  }
+  .entity-name-tag {
+    color: #800000;
+  }
+  .entity-name-selector {
+    color: #800000;
+  }
+  .entity-other-attribute-name {
+    color: #ff0000;
+  }
+  .entity-other-attribute-name-class-css,
+  .entity-other-attribute-name-class-mixin-css,
+  .entity-other-attribute-name-id-css,
+  .entity-other-attribute-name-parent-selector-css,
+  .entity-other-attribute-name-pseudo-class-css,
+  .entity-other-attribute-name-pseudo-element-css,
+  .source-css-less entity-other-attribute-name-id,
+  .entity-other-attribute-name-attribute-scss,
+  .entity-other-attribute-name-scss {
+    color: #800000;
+  }
+  .invalid {
+    color: #cd3131;
+  }
+  .markup-underline {
+    text-decoration: underline;
+  }
+  .markup-bold {
+    font-weight: bold;
+    color: #000080;
+  }
+  .markup-heading {
+    font-weight: bold;
+    color: #800000;
+  }
+  .markup-italic {
+    font-style: italic;
+  }
+  .markup-inserted {
+    color: #098658;
+  }
+  .markup-deleted {
+    color: #a31515;
+  }
+  .markup-changed {
+    color: #0451a5;
+  }
+  .punctuation-definition-quote-begin-markdown,
+  .punctuation-definition-list-begin-markdown {
+    color: #0451a5;
+  }
+  .markup-inline-raw {
+    color: #800000;
+  }
+  .punctuation-definition-tag {
+    color: #800000;
+  }
+  .meta-preprocessor,
+  .entity-name-function-preprocessor {
+    color: #0000ff;
+  }
+  .meta-preprocessor-string {
+    color: #a31515;
+  }
+  .meta-preprocessor-numeric {
+    color: #098658;
+  }
+  .meta-structure-dictionary-key-python {
+    color: #0451a5;
+  }
+  .storage {
+    color: #0000ff;
+  }
+  .storage-type {
+    color: #0000ff;
+  }
+  .storage-modifier,
+  .keyword-operator-noexcept {
+    color: #0000ff;
+  }
+  .string,
+  .entity-name-operator-custom-literal-string,
+  .meta-embedded-assembly {
+    color: #a31515;
+  }
+  .string-comment-buffered-block-pug,
+  .string-quoted-pug,
+  .string-interpolated-pug,
+  .string-unquoted-plain-in-yaml,
+  .string-unquoted-plain-out-yaml,
+  .string-unquoted-block-yaml,
+  .string-quoted-single-yaml,
+  .string-quoted-double-xml,
+  .string-quoted-single-xml,
+  .string-unquoted-cdata-xml,
+  .string-quoted-double-html,
+  .string-quoted-single-html,
+  .string-unquoted-html,
+  .string-quoted-single-handlebars,
+  .string-quoted-double-handlebars {
+    color: #0000ff;
+  }
+  .string-regexp {
+    color: #811f3f;
+  }
+  .punctuation-definition-template-expression-begin,
+  .punctuation-definition-template-expression-end,
+  .punctuation-section-embedded {
+    color: #0000ff;
+  }
+  .meta-template-expression {
+    color: #000000;
+  }
+  .support-constant-property-value,
+  .support-constant-font-name,
+  .support-constant-media-type,
+  .support-constant-media,
+  .constant-other-color-rgb-value,
+  .constant-other-rgb-value,
+  .support-constant-color {
+    color: #0451a5;
+  }
+  .support-type-vendored-property-name,
+  .support-type-property-name,
+  .variable-css,
+  .variable-scss,
+  .variable-other-less,
+  .source-coffee-embedded {
+    color: #ff0000;
+  }
+  .support-type-property-name-json {
+    color: #0451a5;
+  }
+  .keyword {
+    color: #0000ff;
+  }
+  .keyword-control {
+    color: #0000ff;
+  }
+  .keyword-operator {
+    color: #000000;
+  }
+  .keyword-operator-new,
+  .keyword-operator-expression,
+  .keyword-operator-cast,
+  .keyword-operator-sizeof,
+  .keyword-operator-alignof,
+  .keyword-operator-typeid,
+  .keyword-operator-alignas,
+  .keyword-operator-instanceof,
+  .keyword-operator-logical-python,
+  .keyword-operator-wordlike {
+    color: #0000ff;
+  }
+  .keyword-other-unit {
+    color: #098658;
+  }
+  .punctuation-section-embedded-begin-php,
+  .punctuation-section-embedded-end-php {
+    color: #800000;
+  }
+  .support-function-git-rebase {
+    color: #0451a5;
+  }
+  .constant-sha-git-rebase {
+    color: #098658;
+  }
+  .storage-modifier-import-java,
+  .variable-language-wildcard-java,
+  .storage-modifier-package-java {
+    color: #000000;
+  }
+  .variable-language {
+    color: #0000ff;
   }
 }
