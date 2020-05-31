@@ -19,7 +19,14 @@ export const getStaticProps: GetStaticProps<PostList.Props> = async () => {
 const titleFn = (page: number) => (page === 1 ? [] : [`Page ${page}`]);
 
 const Home = (props: PostList.Props) => {
-  return <PostList {...props} title={titleFn} />;
+  return (
+    <PostList
+      {...props}
+      title={titleFn}
+      description="Expected Exceptions - a blog about code, Software, and things that interest me"
+      canonicalPath=""
+    />
+  );
 };
 
 export default Home;

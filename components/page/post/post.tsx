@@ -2,6 +2,7 @@ import { Blog, Post } from '@lib/blog';
 import { PostMeta, SeriesInfo } from './series';
 
 import { DateTime } from 'luxon';
+import { NextSeo } from 'next-seo';
 import { PageLayout } from '@layout/page';
 import { SeriesMeta } from '@lib/blog/series';
 import { Tags } from '@components/tags';
@@ -17,6 +18,7 @@ type PostData = {
   readonly title: string;
   readonly date: string;
   readonly path: string;
+  readonly excerpt: string;
   readonly tags: readonly TagMeta[];
   readonly content: string;
   readonly series: null | readonly PostMeta[];
@@ -48,6 +50,7 @@ const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
       date: post.date.toFormat('yyyy-MM-dd'),
       path: post.webPath,
       tags: post.tags.map((t) => ({ name: t.name, path: t.webPath })),
+      excerpt: await post.excerptLong,
       content: await post.content,
       series: series(post.series),
       draft: post.draft,
@@ -56,7 +59,18 @@ const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
 };
 
 export const BlogPost = ({ post }: StaticProps) => (
-  <PageLayout title={[post.title]}>
+  <PageLayout title={[post.title]} description={post.excerpt} canonicalPath={post.path}>
+    <NextSeo
+      openGraph={{
+        type: 'article',
+        article: {
+          authors: ['Aleksander Heintz'],
+          section: 'Technology',
+          tags: post.tags.map((t) => t.name),
+          publishedTime: post.date,
+        },
+      }}
+    />
     <article
       className={styles.post}
       itemProp="blogPost"
