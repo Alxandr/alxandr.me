@@ -2,6 +2,7 @@ import { Blog, PostCollection } from '@lib/blog';
 
 import { DateTime } from 'luxon';
 import Link from 'next/link';
+import { NextSeoProps } from 'next-seo';
 import { PageLayout } from '@layout/page';
 import { Tags } from '@components/tags';
 import classNames from 'classnames';
@@ -74,9 +75,14 @@ const getStaticProps = async (
   };
 };
 
-type Props = StaticProps & { title: (page: number) => readonly string[] };
+//type Props = StaticProps & { title: (page: number) => readonly string[] };
+interface Props extends StaticProps {
+  title: (page: number) => readonly string[];
+  description: string;
+  canonicalPath: string;
+}
 
-export const PostList = ({ posts, page, title: titleProp }: Props) => {
+export const PostList = ({ posts, page, title: titleProp, description, canonicalPath }: Props) => {
   const postNodes = useMemo(
     () =>
       posts.map((post) => (
@@ -113,7 +119,11 @@ export const PostList = ({ posts, page, title: titleProp }: Props) => {
   );
   const title = useMemo(() => titleProp(page), [page, titleProp]);
 
-  return <PageLayout title={title}>{postNodes}</PageLayout>;
+  return (
+    <PageLayout title={title} description={description} canonicalPath={canonicalPath}>
+      {postNodes}
+    </PageLayout>
+  );
 };
 
 PostList.getStaticProps = getStaticProps;

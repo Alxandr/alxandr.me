@@ -18,6 +18,7 @@ export const getStaticPaths: GetStaticPaths<Query> = async () => {
 
 interface Props extends PostList.Props {
   readonly tagName: string;
+  readonly path: string;
 }
 
 export const getStaticProps: GetStaticProps<Props, Query> = async (ctx) => {
@@ -35,16 +36,24 @@ export const getStaticProps: GetStaticProps<Props, Query> = async (ctx) => {
     props: {
       ...props,
       tagName: tag.name,
+      path: tag.webPath,
     },
   };
 };
 
-const Home = ({ tagName, ...props }: Props) => {
+const Home = ({ tagName, path, ...props }: Props) => {
   const titleFn = useCallback(
     (page: number) => (page === 1 ? [`Tag: ${tagName}`] : [`Tag: ${tagName}`, `Page ${page}`]),
     [tagName],
   );
-  return <PostList {...props} title={titleFn} />;
+  return (
+    <PostList
+      {...props}
+      title={titleFn}
+      description={`Tag: ${tagName} | Expected Exceptions - a blog about code, Software, and things that interest me`}
+      canonicalPath={path}
+    />
+  );
 };
 
 export default Home;
