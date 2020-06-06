@@ -1,6 +1,8 @@
 backend:
   name: github
   repo: Alxandr/alxandr.me
+  base_url: https://alxandr.me
+  auth_endpoint: api/authorize
 
 publish_mode: editorial_workflow
 media_folder: public/content/img
