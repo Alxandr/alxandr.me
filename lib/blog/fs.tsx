@@ -1,20 +1,17 @@
 import { DateTime } from 'luxon';
 import { F_OK } from 'constants';
 import _slugify from 'slugify';
-import frontMatter from 'gray-matter';
 import { promises as fs } from 'fs';
-import glob from 'globby';
 import path from 'path';
 
-const segmentsRegex = /^(\d{4})\/(\d{2})\/(\d{2})\/(.*)\.md$/;
+const segmentsRegex = /^(\d{4})-(\d{2})-(\d{2})-(.*)\.md$/;
 export const postsDirectory = path.resolve(process.cwd(), 'posts');
-export const draftsDirectory = path.resolve(postsDirectory, 'drafts');
 
 export const postWebPath = (date: DateTime, slug: string) => `${date.toFormat('yyyy/MM/dd')}/${slug}`;
 
 export const findPosts = async (includeDrafts: boolean) => {
   const ret: PostFile[] = [];
-  const files = await glob('*/*/*/*.md', { cwd: postsDirectory });
+  const files = await fs.readdir(postsDirectory);
   for (const file of files) {
     const fullPath = path.resolve(postsDirectory, file);
     const segments = segmentsRegex.exec(file);
@@ -32,27 +29,27 @@ export const findPosts = async (includeDrafts: boolean) => {
     ret.push(new PostFile(fullPath, webPath, date));
   }
 
-  if (includeDrafts) {
-    const now = new Date();
-    const today = DateTime.fromObject({
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    });
-    const drafts = await findDrafts();
-    for (const draft of drafts) {
-      const date = draft.date ?? today;
-      const webPath = postWebPath(date, draft.slug);
+  // if (includeDrafts) {
+  //   const now = new Date();
+  //   const today = DateTime.fromObject({
+  //     year: now.getFullYear(),
+  //     month: now.getMonth() + 1,
+  //     day: now.getDate(),
+  //   });
+  //   const drafts = await findDrafts();
+  //   for (const draft of drafts) {
+  //     const date = draft.date ?? today;
+  //     const webPath = postWebPath(date, draft.slug);
 
-      ret.push(new PostFile(draft.fullPath, webPath, date, true));
-    }
-  }
+  //     ret.push(new PostFile(draft.fullPath, webPath, date, true));
+  //   }
+  // }
 
   return ret;
 };
 
 export const findPost = async (year: string, month: string, day: string, slug: string, includeDrafts: boolean) => {
-  const expected = path.resolve(postsDirectory, year, month, day, slug + '.md');
+  const expected = path.resolve(postsDirectory, `${year}-${month}-${day}-${slug}.md`);
   try {
     await fs.access(expected, F_OK);
     const date = DateTime.fromObject({
@@ -63,27 +60,27 @@ export const findPost = async (year: string, month: string, day: string, slug: s
     });
     return new PostFile(expected, postWebPath(date, slug), date);
   } catch (e) {
-    if (includeDrafts) {
-      const draft = await findDraftPost(slug);
-      if (draft) {
-        const date =
-          draft.date ??
-          DateTime.fromObject({
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
-            day: new Date().getDate(),
-          });
-        return new PostFile(draft.fullPath, postWebPath(date, draft.slug), date);
-      }
-    }
+    // if (includeDrafts) {
+    //   const draft = await findDraftPost(slug);
+    //   if (draft) {
+    //     const date =
+    //       draft.date ??
+    //       DateTime.fromObject({
+    //         year: new Date().getFullYear(),
+    //         month: new Date().getMonth() + 1,
+    //         day: new Date().getDate(),
+    //       });
+    //     return new PostFile(draft.fullPath, postWebPath(date, draft.slug), date);
+    //   }
+    // }
     throw new Error(`File: ${expected} does not exist`);
   }
 };
 
-const findDraftPost = async (slug: string) => {
-  const drafts = await findDrafts();
-  return drafts.find((d) => d.slug === slug);
-};
+// const findDraftPost = async (slug: string) => {
+//   const drafts = await findDrafts();
+//   return drafts.find((d) => d.slug === slug);
+// };
 
 export abstract class AbstractPostFile {
   private readonly _fullPath: string;
@@ -154,23 +151,23 @@ export const slugify = (() => {
   };
 })();
 
-export const findDrafts = async () => {
-  const ret: PostDraftFile[] = [];
-  const files = await glob('*.md', { cwd: draftsDirectory });
-  for (const file of files) {
-    const fullPath = path.resolve(draftsDirectory, file);
-    const content = await fs.readFile(fullPath, 'utf-8');
-    const parsed = frontMatter(content);
-    const date = parsed.data.date ? DateTime.fromISO(parsed.data.date, { locale: 'en-US' }) : null;
-    if (date && date.invalidExplanation) throw new Error(`Failed to parse date: ${date.invalidExplanation}`);
+// export const findDrafts = async () => {
+//   const ret: PostDraftFile[] = [];
+//   const files = await glob('*.md', { cwd: draftsDirectory });
+//   for (const file of files) {
+//     const fullPath = path.resolve(draftsDirectory, file);
+//     const content = await fs.readFile(fullPath, 'utf-8');
+//     const parsed = frontMatter(content);
+//     const date = parsed.data.date ? DateTime.fromISO(parsed.data.date, { locale: 'en-US' }) : null;
+//     if (date && date.invalidExplanation) throw new Error(`Failed to parse date: ${date.invalidExplanation}`);
 
-    const slug = slugify(parsed.data.title);
+//     const slug = slugify(parsed.data.title);
 
-    ret.push(new PostDraftFile(fullPath, `drafts/${slug}`, slug, date));
-  }
+//     ret.push(new PostDraftFile(fullPath, `drafts/${slug}`, slug, date));
+//   }
 
-  return ret;
-};
+//   return ret;
+// };
 
 class PostDraftFile extends AbstractPostFile {
   private readonly _slug: string;

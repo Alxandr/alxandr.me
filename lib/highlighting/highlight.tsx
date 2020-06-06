@@ -1,122 +1,12 @@
-import { INITIAL, IOnigLib, Registry, parseRawGrammar } from 'vscode-textmate';
 import { Node, Parent } from 'unist';
-import { OnigScanner, OnigString, loadWASM } from 'vscode-oniguruma';
 import h, { HTMLNode } from 'hastscript';
 
 import { Plugin } from 'unified';
 import _ from 'lodash';
 import classNames from 'classnames';
 import convert from 'unist-util-is/convert';
-import { promises as fs } from 'fs';
 import nodeToString from 'hast-util-to-string';
-import path from 'path';
-
-const grammars = (() => {
-  type Grammar = {
-    readonly name: string;
-    readonly shortNames: readonly string[];
-    readonly scopeName: string;
-    readonly definitionFile: string;
-  };
-
-  // to find more; go here: https://github.com/microsoft/vscode/find/master and search for tmLanguage
-  const grammars: Grammar[] = [
-    {
-      name: 'Rust',
-      shortNames: ['rust'],
-      scopeName: 'source.rust',
-      definitionFile: 'rust.tmLanguage.json',
-    },
-    {
-      name: 'Jsonnet',
-      shortNames: ['jsonnet', 'libjsonnet'],
-      scopeName: 'source.jsonnet',
-      definitionFile: 'jsonnet.tmLanguage.json',
-    },
-    {
-      name: 'FSharp',
-      shortNames: ['fsharp', 'fsx', 'fs'],
-      scopeName: 'source.fsharp',
-      definitionFile: 'fsharp.tmLanguage.json',
-    },
-    {
-      name: 'JSON',
-      shortNames: ['json'],
-      scopeName: 'source.json',
-      definitionFile: 'JSON.tmLanguage.json',
-    },
-    {
-      name: 'C#',
-      shortNames: ['c#', 'csharp', 'dotnet'],
-      scopeName: 'source.cs',
-      definitionFile: 'csharp.tmLanguage.json',
-    },
-    {
-      name: 'Markdown',
-      shortNames: ['markdown', 'md'],
-      scopeName: 'text.html.markdown',
-      definitionFile: 'markdown.tmLanguage.json',
-    },
-  ];
-
-  const langs = new Map<string, Grammar>();
-  const scopes = new Map<string, Grammar>();
-  for (const g of grammars) {
-    for (const n of g.shortNames) {
-      langs.set(n, g);
-    }
-
-    scopes.set(g.scopeName, g);
-  }
-
-  return Object.freeze({
-    byLang(name: string): Grammar | null {
-      return langs.get(name) ?? null;
-    },
-
-    byScope(name: string): Grammar | null {
-      return scopes.get(name) ?? null;
-    },
-
-    scopes: Object.freeze([...scopes.keys()]),
-    langs: Object.freeze([...langs.keys()]),
-  });
-})();
-
-const onigLib = (() => {
-  const lib: IOnigLib = {
-    createOnigScanner: (sources) => new OnigScanner(sources),
-    createOnigString: (str) => new OnigString(str),
-  };
-
-  const load = async () => {
-    const onigurumaPath = path.resolve('node_modules', 'vscode-oniguruma', 'release');
-    const wasmPath = path.resolve(onigurumaPath, 'onig.wasm');
-    const data = await fs.readFile(wasmPath);
-
-    try {
-      await loadWASM(data.buffer);
-    } catch (e) {}
-  };
-
-  const result = load().then(() => lib);
-  return result;
-})();
-
-const registry = new Registry({
-  onigLib: onigLib,
-  loadGrammar: async (scopeName) => {
-    const grammar = grammars.byScope(scopeName);
-    if (!grammar) {
-      console.warn(`Unknown scope name: ${scopeName} (not in: ${grammars.scopes})`);
-      return null;
-    }
-
-    const file = path.resolve('lib', 'highlighting', 'grammars', grammar.definitionFile);
-    const content = await fs.readFile(file, 'utf-8');
-    return parseRawGrammar(content, file);
-  },
-});
+import { tokenize } from '@yolodev/highlight';
 
 const lines = (content: string): Iterable<string> => {
   return content.split('\n').map((l) => l.trimEnd());
@@ -152,49 +42,48 @@ const classesFromScopes = (scopes: readonly string[], langScopeName: string): st
   return classNames(...classes);
 };
 
-const highlightCode = async (content: string, lang: string): Promise<Node | null> => {
-  const grammarMeta = grammars.byLang(lang);
-  if (!grammarMeta) return null;
+const highlightCode = async (content: string, lang: string): Promise<readonly Node[] | null> => {
+  const tokenStream = await tokenize(content, lang);
+  if (!tokenStream) {
+    console.warn(`Language ${lang} not found.`);
+    return null;
+  }
 
-  const grammar = await registry.loadGrammar(grammarMeta.scopeName);
-  if (!grammar) return null;
-
-  //console.log(`tokenizing ${lang}: \n${content}`);
-  let ruleStack = INITIAL;
-  let current: HTMLNode = h('span', { class: classesFromScope(grammarMeta.scopeName) });
-  const stack: HTMLNode[] = [current];
-  const scopeStack = [grammarMeta.scopeName];
-  for (const line of lines(content)) {
-    const { tokens, ruleStack: nextRuleStack } = grammar.tokenizeLine(line, ruleStack);
-    for (const token of tokens) {
-      while (
-        scopeStack.length > token.scopes.length ||
-        scopeStack[scopeStack.length - 1] !== token.scopes[scopeStack.length - 1]
-      ) {
-        current = stack.pop()!;
-        scopeStack.pop();
-      }
-      for (const scope of token.scopes.slice(stack.length)) {
+  const nodes: Node[] = [];
+  let stack: Node[][] = [];
+  let current: Node[] = nodes;
+  for (const e of tokenStream) {
+    switch (e.type) {
+      case 'start': {
+        const node = h('span', { class: classesFromScope(e.scope) });
+        current.push(node);
         stack.push(current);
-        const next = h('span', { class: classesFromScope(scope) });
-        current.children.push(next);
-        scopeStack.push(scope);
-        current = next;
+        current = node.children;
+        break;
       }
 
-      const text = line.substring(token.startIndex, token.endIndex);
-      //console.log(`${text}: ${token.scopes.join('|')}`);
-      current.children.push({ type: 'text', value: text });
+      case 'token': {
+        const node = { type: 'text', value: e.text };
+        current.push(node);
+        break;
+      }
+
+      case 'line': {
+        const node = { type: 'text', value: '\n' };
+        current.push(node);
+        break;
+      }
+
+      case 'end': {
+        if (stack.length === 0) throw new Error('stack inbalance (end with no start)');
+        current = stack.pop()!;
+        break;
+      }
     }
-    ruleStack = nextRuleStack;
-    current.children.push({ type: 'text', value: '\n' });
   }
 
-  while (stack.length > 0) {
-    current = stack.pop()!;
-  }
-  //console.log(`produced tokens: ${nodes.length}`);
-  return current;
+  if (stack.length > 0) throw new Error('stack inbalance (missing end)');
+  return nodes;
 };
 
 const getLanguage = (node: Node) => {
@@ -224,7 +113,7 @@ const visitor = async (node: Node, parents: readonly Parent[]) => {
   (parent as any).properties.className = classNames((parent as any).properties.className, 'language-' + lang);
   const result = await highlightCode(nodeToString(node), lang);
   if (result) {
-    node.children = [result];
+    node.children = result;
   }
 };
 

@@ -6,7 +6,7 @@ import { TagMeta } from './blog/tags';
 import _ from 'lodash';
 import { readPostMeta } from './blog/process';
 
-export { findDrafts, postsDirectory } from './blog/fs';
+export { postsDirectory } from './blog/fs';
 export { Post, PostCollection } from './blog/collection';
 
 const append = <K, V>(map: Map<K, V[]>, key: K, value: V) => {
