@@ -66,9 +66,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "posts:release": "ts-node --transpile-only --script-mode bin/release.tsx",
-    "posts:reorg": "ts-node --transpile-only --script-mode bin/reorg.tsx"
+    "start": "next start"
   },
   "importSort": {
     ".js, .jsx, .es6, .es, .ts, .tsx": {
