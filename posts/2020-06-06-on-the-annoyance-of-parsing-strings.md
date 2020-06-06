@@ -31,7 +31,7 @@ The fist thing I would like to point out is that depending on the language you'r
   |||
   ```
 
-The first two can be easily tokenised in a lexer using some rather crazy regexes[^3], the last one I'm not convinced can be processed using regex at all (though feel free to prove me wrong). However, neither one of them can be *parsed*[^4] using regexes. 
+The first two can be easily tokenised in a lexer using some rather crazy regexes[^3], the last one I'm not convinced can be processed using regex at all (though feel free to prove me wrong). However, neither one of them can be *parsed*[^4] using regexes. To parse the normal and verbatim strings requires replacing some form of escaped tokens with the actual value. This *can* definitely be done using regexes, but it doesn't have to be. And I find it easier to do it manually when you want to deal with errors (like invalid escape sequences and such).
 
 [^1]: 5 if you're counting different quote types as different string types.
 [^2]: This string is not the same as the two previous, because it contains a newline.
