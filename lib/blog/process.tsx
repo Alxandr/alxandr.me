@@ -100,7 +100,9 @@ export class PostMeta {
 
     const requiredDate = (name: string, value: unknown, draft: boolean) => {
       if (!value && draft) return today();
-      if (typeof value !== 'string' || value.length === 0) throw new Error(`${name} is required in file ${file}`);
+      if (value instanceof Date) value = value.toISOString();
+      if (typeof value !== 'string' || value.length === 0)
+        throw new Error(`${name} is required in file ${file}, got ${value}`);
       const date = DateTime.fromISO(value, { zone: 'utc', locale: 'en-US' });
       const { invalidExplanation } = date;
       if (invalidExplanation) throw new Error(`Bad date in ${name}: ${invalidExplanation} file ${file}`);
