@@ -23,7 +23,7 @@
     "hast-util-to-string": "1.0.3",
     "hastscript": "5.1.2",
     "lodash": "4.17.19",
-    "luxon": "1.24.1",
+    "luxon": "1.25.0",
     "netlify-cms-oauth-provider-node": "1.1.0",
     "next": "9.5.5",
     "next-fonts": "1.1.0",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/classnames": "2.2.11",
     "@types/lodash": "4.14.154",
-    "@types/luxon": "1.24.0",
+    "@types/luxon": "1.25.0",
     "@types/mkdirp": "1.0.0",
     "@types/node": "14.0.6",
     "@types/nprogress": "0.2.0",
