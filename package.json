@@ -37,7 +37,7 @@
     "remark-footnotes": "1.0.0",
     "remark-parse": "8.0.2",
     "remark-rehype": "7.0.0",
-    "slugify": "1.4.0",
+    "slugify": "1.4.6",
     "unified": "9.0.0",
     "unist-util-is": "4.0.2",
     "unist-util-visit": "2.0.2"
