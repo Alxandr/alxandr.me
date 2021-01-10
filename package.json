@@ -62,7 +62,7 @@
     "stylelint-prettier": "1.1.2",
     "ts-node": "8.10.2",
     "typescript": "3.9.7",
-    "typescript-plugin-css-modules": "2.3.0"
+    "typescript-plugin-css-modules": "2.8.0"
   },
   "scripts": {
     "dev": "next dev",
