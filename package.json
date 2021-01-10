@@ -52,7 +52,7 @@
     "@types/react": "16.9.35",
     "mkdirp": "1.0.4",
     "postcss-flexbugs-fixes": "4.2.1",
-    "postcss-nested": "4.2.1",
+    "postcss-nested": "4.2.3",
     "postcss-preset-env": "6.7.0",
     "stylelint": "13.5.0",
     "stylelint-config-css-modules": "2.2.0",
