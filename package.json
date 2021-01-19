@@ -54,7 +54,7 @@
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-nested": "4.2.3",
     "postcss-preset-env": "6.7.0",
-    "stylelint": "13.8.0",
+    "stylelint": "13.9.0",
     "stylelint-config-css-modules": "2.2.0",
     "stylelint-config-prettier": "8.0.2",
     "stylelint-config-rational-order": "0.1.2",
