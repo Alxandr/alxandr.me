@@ -21,7 +21,7 @@
     "gray-matter": "4.0.3",
     "hast-util-is-element": "1.1.0",
     "hast-util-to-string": "1.0.4",
-    "hastscript": "6.0.0",
+    "hastscript": "7.0.1",
     "lodash": "4.17.21",
     "luxon": "1.26.0",
     "netlify-cms-oauth-provider-node": "2.0.0",
