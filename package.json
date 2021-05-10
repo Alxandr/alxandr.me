@@ -40,7 +40,7 @@
     "slugify": "1.5.2",
     "unified": "9.2.1",
     "unist-util-is": "4.1.0",
-    "unist-util-visit": "2.0.3"
+    "unist-util-visit": "3.1.0"
   },
   "devDependencies": {
     "@types/classnames": "2.3.0",
