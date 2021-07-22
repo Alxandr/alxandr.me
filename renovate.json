@@ -8,5 +8,5 @@
       "groupName": "unified packages",
       "packagePatterns": ["^unified$", "^unist-", "^hast-", "^hastscript$"]
     }
-  }
+  ]
 }
