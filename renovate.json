@@ -6,7 +6,7 @@
     {
       "datasources": ["npm"],
       "groupName": "unified packages",
-      "packagePatterns": ["^unified$", "^unist-", "^hast-", "^rehype-", "^hastscript$"]
+      "packagePatterns": ["^unified$", "^unist-", "^hast-", "^rehype-", "^remark-", "^hastscript$"]
     }
   ]
 }
