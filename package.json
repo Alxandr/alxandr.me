@@ -35,7 +35,7 @@
     "rehype-slug": "4.0.1",
     "rehype-stringify": "8.0.0",
     "remark-footnotes": "3.0.0",
-    "remark-parse": "9.0.0",
+    "remark-parse": "10.0.0",
     "remark-rehype": "8.1.0",
     "slugify": "1.6.0",
     "unified": "9.2.1",
