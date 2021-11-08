@@ -93,7 +93,7 @@ export const RootLayout = ({ children }: Props) => {
           <div className={styles.beforeTitle} />
           <h1 className={styles.title} itemProp="headline">
             <Link href="/" scroll={false}>
-              <a href="/">Expected Exceptions</a>
+              Expected Exceptions
             </Link>
             <p className={styles.subtitle} itemProp="alternativeHeadline">
               Code, Software, and things that interest me

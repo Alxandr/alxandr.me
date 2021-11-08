@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
-import { PostList } from '@components/page';
-import { getBlog } from '@lib/blog';
+import { PostList } from '@/components/page';
+import { getBlog } from '@/lib/blog';
 import { useCallback } from 'react';
 
 type Query = {
@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths<Query> = async () => {
   return { paths, fallback: false };
 };
 
-interface Props extends PostList.Props {
+interface Props extends PostList.StaticProps {
   readonly tagName: string;
   readonly path: string;
 }
@@ -46,6 +46,7 @@ const Home = ({ tagName, path, ...props }: Props) => {
     (page: number) => (page === 1 ? [`Tag: ${tagName}`] : [`Tag: ${tagName}`, `Page ${page}`]),
     [tagName],
   );
+
   return (
     <PostList
       {...props}

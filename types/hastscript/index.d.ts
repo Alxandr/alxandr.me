@@ -1,18 +1,20 @@
 declare module 'hastscript' {
-  import { Node } from 'unist';
+  import { Element, ElementContent } from 'hast';
 
-  type Child = Node | string;
-
-  export interface HTMLNode extends Node {
-    children: Node[];
-  }
-
-  function h(type: string): HTMLNode;
-  function h(type: string, attributes: { readonly [name: string]: string }): HTMLNode;
-  function h(type: string, children: readonly Child[]): HTMLNode;
-  function h(type: string, ...children: readonly Child[]): HTMLNode;
-  function h(type: string, attributes: { readonly [name: string]: string }, children: readonly Child[]): HTMLNode;
-  function h(type: string, attributes: { readonly [name: string]: string }, ...children: readonly Child[]): HTMLNode;
+  function h(type: string): Element;
+  function h(type: string, attributes: { readonly [name: string]: string }): Element;
+  function h(type: string, children: readonly ElementContent[]): Element;
+  function h(type: string, ...children: readonly ElementContent[]): Element;
+  function h(
+    type: string,
+    attributes: { readonly [name: string]: string },
+    children: readonly ElementContent[],
+  ): Element;
+  function h(
+    type: string,
+    attributes: { readonly [name: string]: string },
+    ...children: readonly ElementContent[]
+  ): Element;
 
   export = h;
 }

@@ -1,8 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { getBlog, getPost } from '@lib/blog';
+import { getBlog, getPost } from '@/lib/blog';
 
-import { BlogPost } from '@components/page/post/post';
-import { PageLayout } from '@layout/page';
+import { BlogPost } from '@/components/page/post/post';
+import { PageLayout } from '@/layout/page';
 
 type Query = {
   readonly year: string;
@@ -27,4 +27,5 @@ export const getStaticProps: GetStaticProps<BlogPost.Props, Query> = async (ctx)
   return { props: await BlogPost.getStaticProps(post, blog) };
 };
 
-export default (props: BlogPost.Props) => <BlogPost {...props} />;
+const Post = (props: BlogPost.Props) => <BlogPost {...props} />;
+export default Post;

@@ -1,10 +1,9 @@
-import { Blog, PostCollection } from '@lib/blog';
+import { Blog, PostCollection } from '@/lib/blog';
 
 import { DateTime } from 'luxon';
 import Link from 'next/link';
-import { NextSeoProps } from 'next-seo';
-import { PageLayout } from '@layout/page';
-import { Tags } from '@components/tags';
+import { PageLayout } from '@/layout/page';
+import { Tags } from '@/components/tags';
 import classNames from 'classnames';
 import styles from './post-list.module.css';
 import { useMemo } from 'react';
@@ -31,7 +30,7 @@ type PostMeta = {
   readonly draft: boolean;
 };
 
-type StaticProps = {
+type PostListStaticProps = {
   page: number;
   totalPages: number;
   posts: PostMeta[];
@@ -42,7 +41,7 @@ const getStaticProps = async (
   blog: Blog,
   listRootPath: string,
   pagePathParam: string | null,
-): Promise<StaticProps | string | null> => {
+): Promise<PostListStaticProps | string | null> => {
   let page = 1;
   if (pagePathParam) {
     page = parseInt(pagePathParam, 10);
@@ -51,7 +50,7 @@ const getStaticProps = async (
     if (page > posts.pages) return `${listRootPath}/${posts.pages}`;
   }
 
-  const series = (series: import('@lib/blog/series').SeriesMeta | null): SeriesMeta | null => {
+  const series = (series: import('@/lib/blog/series').SeriesMeta | null): SeriesMeta | null => {
     if (!series) return null;
     return { name: series.name, path: series.webPath };
   };
@@ -76,13 +75,13 @@ const getStaticProps = async (
 };
 
 //type Props = StaticProps & { title: (page: number) => readonly string[] };
-interface Props extends StaticProps {
+interface PostListProps extends PostListStaticProps {
   title: (page: number) => readonly string[];
   description: string;
   canonicalPath: string;
 }
 
-export const PostList = ({ posts, page, title: titleProp, description, canonicalPath }: Props) => {
+export const PostList = ({ posts, page, title: titleProp, description, canonicalPath }: PostListProps) => {
   const postNodes = useMemo(
     () =>
       posts.map((post) => (
@@ -129,5 +128,9 @@ export const PostList = ({ posts, page, title: titleProp, description, canonical
 PostList.getStaticProps = getStaticProps;
 
 export namespace PostList {
-  export type Props = StaticProps;
+  export type StaticProps = PostListStaticProps;
+  export type Props = PostListProps;
 }
+
+// export const PostList = () => <h1>Hello</h1>;
+// PostList.getStaticProps = () => Promise.resolve({});

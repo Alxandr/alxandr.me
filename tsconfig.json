@@ -14,13 +14,18 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "typeRoots": ["./node_modules/@types", "./typings"],
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
     "baseUrl": ".",
     "paths": {
-      "@layout/*": ["components/layout/*"],
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"]
-    }
+      "@/layout/*": ["components/layout/*"],
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
+    },
+    "incremental": true
   },
   "exclude": ["node_modules"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

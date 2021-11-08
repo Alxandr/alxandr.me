@@ -1,9 +1,11 @@
 import { Plugin, Transformer } from 'unified';
 
+import type { Element } from 'hast';
 import { Node } from 'unist';
-import is from 'hast-util-is-element';
-import visit from 'unist-util-visit';
+import { convert } from 'unist-util-is';
+import { visit } from 'unist-util-visit';
 
+const isElement = convert<Element>('element');
 const tagMap = {
   h1: 'h3',
   h2: 'h4',
@@ -13,10 +15,8 @@ const tagMap = {
   h6: 'strong',
 };
 
-const tagNames = Object.keys(tagMap);
-
 const visitor = (node: Node) => {
-  if (is(node, tagNames)) {
+  if (isElement(node) && node.tagName.toLocaleLowerCase() in tagMap) {
     //node.type = tagMap[node.type as keyof typeof tagMap];
     node.tagName = tagMap[node.tagName as keyof typeof tagMap];
   }

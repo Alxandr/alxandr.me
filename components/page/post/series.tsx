@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PropsForTag } from '@components/utils';
+import { PropsForTag } from '@/components/utils';
 
 export type PostMeta = {
   readonly title: string;

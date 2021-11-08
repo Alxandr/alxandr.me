@@ -1,11 +1,11 @@
-import { Blog, Post } from '@lib/blog';
+import { Blog, Post } from '@/lib/blog';
 import { PostMeta, SeriesInfo } from './series';
 
 import { DateTime } from 'luxon';
 import { NextSeo } from 'next-seo';
-import { PageLayout } from '@layout/page';
-import { SeriesMeta } from '@lib/blog/series';
-import { Tags } from '@components/tags';
+import { PageLayout } from '@/layout/page';
+import { SeriesMeta } from '@/lib/blog/series';
+import { Tags } from '@/components/tags';
 import _ from 'lodash';
 import styles from './post.module.css';
 
