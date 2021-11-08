@@ -1,8 +1,8 @@
+import { Post as BlogPost, getStaticPostProps } from '@/components/page';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { getBlog, getPost } from '@/lib/blog';
 
-import { BlogPost } from '@/components/page/post/post';
-import { PageLayout } from '@/layout/page';
+import type { PostStaticProps } from '@/components/page';
 
 type Query = {
   readonly year: string;
@@ -19,13 +19,13 @@ export const getStaticPaths: GetStaticPaths<Query> = async () => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps: GetStaticProps<BlogPost.Props, Query> = async (ctx) => {
+export const getStaticProps: GetStaticProps<PostStaticProps, Query> = async (ctx) => {
   const { year, month, day, slug } = ctx.params!;
   const { post, blog } = await getPost(year, month, day, slug, {
     includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
   });
-  return { props: await BlogPost.getStaticProps(post, blog) };
+  return { props: await getStaticPostProps(post, blog) };
 };
 
-const Post = (props: BlogPost.Props) => <BlogPost {...props} />;
+const Post = (props: PostStaticProps) => <BlogPost {...props} />;
 export default Post;

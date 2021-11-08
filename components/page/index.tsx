@@ -1,2 +1,4 @@
-export { PostList } from './post-list';
-export { Post } from './post';
+export { PostList, getStaticPostListProps } from './post-list';
+export { Post, getStaticPostProps } from './post';
+export type { PostListProps, PostListStaticProps } from './post-list';
+export type { PostStaticProps } from './post';

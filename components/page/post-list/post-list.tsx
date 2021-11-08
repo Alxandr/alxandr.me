@@ -8,17 +8,17 @@ import classNames from 'classnames';
 import styles from './post-list.module.css';
 import { useMemo } from 'react';
 
-type TagMeta = {
+export type TagMeta = {
   readonly name: string;
   readonly path: string;
 };
 
-type SeriesMeta = {
+export type SeriesMeta = {
   readonly name: string;
   readonly path: string;
 };
 
-type PostMeta = {
+export type PostMeta = {
   readonly id: string;
   readonly title: string;
   readonly date: string;
@@ -30,13 +30,13 @@ type PostMeta = {
   readonly draft: boolean;
 };
 
-type PostListStaticProps = {
+export type PostListStaticProps = {
   page: number;
   totalPages: number;
   posts: PostMeta[];
 };
 
-const getStaticProps = async (
+export const getStaticPostListProps = async (
   posts: PostCollection,
   blog: Blog,
   listRootPath: string,
@@ -74,8 +74,7 @@ const getStaticProps = async (
   };
 };
 
-//type Props = StaticProps & { title: (page: number) => readonly string[] };
-interface PostListProps extends PostListStaticProps {
+export interface PostListProps extends PostListStaticProps {
   title: (page: number) => readonly string[];
   description: string;
   canonicalPath: string;
@@ -124,13 +123,3 @@ export const PostList = ({ posts, page, title: titleProp, description, canonical
     </PageLayout>
   );
 };
-
-PostList.getStaticProps = getStaticProps;
-
-export namespace PostList {
-  export type StaticProps = PostListStaticProps;
-  export type Props = PostListProps;
-}
-
-// export const PostList = () => <h1>Hello</h1>;
-// PostList.getStaticProps = () => Promise.resolve({});

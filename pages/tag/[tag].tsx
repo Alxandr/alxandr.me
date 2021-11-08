@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { PostList, PostListStaticProps, getStaticPostListProps } from '@/components/page';
 
-import { PostList } from '@/components/page';
 import { getBlog } from '@/lib/blog';
 import { useCallback } from 'react';
 
@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths<Query> = async () => {
   return { paths, fallback: false };
 };
 
-interface Props extends PostList.StaticProps {
+interface Props extends PostListStaticProps {
   readonly tagName: string;
   readonly path: string;
 }
@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps<Props, Query> = async (ctx) => {
   });
   const tag = blog.tags.bySlug(tagSlug);
   if (!tag) throw new Error(`not found`);
-  const props = await PostList.getStaticProps(tag, blog, `/${tag.webPath}`, null);
+  const props = await getStaticPostListProps(tag, blog, `/${tag.webPath}`, null);
   if (!props) throw new Error(`not found for some reason`);
   if (typeof props === 'string') throw new Error(`redirect to: ${props}`);
 
