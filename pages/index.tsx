@@ -1,24 +1,30 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { PostList, getStaticPostListProps } from '@/components/page';
 
-import { PostList } from '@components/page';
-import { getBlog } from '@lib/blog';
+import { GetStaticProps } from 'next';
+import type { PostListStaticProps } from '@/components/page';
+import { getBlog } from '@/lib/blog';
 
-export const getStaticProps: GetStaticProps<PostList.Props> = async () => {
-  const blog = await getBlog({
-    includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
-  });
-  const props = await PostList.getStaticProps(blog, blog, '/', null);
-  if (!props) throw new Error(`not found for some reason`);
-  if (typeof props === 'string') throw new Error(`redirect to: ${props}`);
+export const getStaticProps: GetStaticProps<PostListStaticProps> = async () => {
+  try {
+    const blog = await getBlog({
+      includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
+    });
+    const props = await getStaticPostListProps(blog, blog, '/', null);
+    if (!props) throw new Error(`not found for some reason`);
+    if (typeof props === 'string') throw new Error(`redirect to: ${props}`);
 
-  return {
-    props,
-  };
+    return {
+      props,
+    };
+  } catch (e) {
+    console.error((e && (e as any).stack) || e);
+    throw e;
+  }
 };
 
 const titleFn = (page: number) => (page === 1 ? [] : [`Page ${page}`]);
 
-const Home = (props: PostList.Props) => {
+const Home = (props: PostListStaticProps) => {
   return (
     <PostList
       {...props}

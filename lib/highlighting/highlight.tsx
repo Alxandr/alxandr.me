@@ -1,16 +1,16 @@
-import { Node, Parent } from 'unist';
-import h, { HTMLNode } from 'hastscript';
+import type { DocType, Element, ElementContent, Parent, Root, RootContent } from 'hast';
 
 import { Plugin } from 'unified';
 import _ from 'lodash';
 import classNames from 'classnames';
-import convert from 'unist-util-is/convert';
-import nodeToString from 'hast-util-to-string';
+import { convert } from 'unist-util-is';
+import { h } from 'hastscript';
+import { toString as nodeToString } from 'hast-util-to-string';
 import { tokenize } from '@yolodev/highlight';
 
-const lines = (content: string): Iterable<string> => {
-  return content.split('\n').map((l) => l.trimEnd());
-};
+const isElement = convert<Element>('element');
+const isPreTag = convert<Element>({ type: 'element', tagName: 'pre' });
+const isCodeTag = convert<Element>({ type: 'element', tagName: 'code' });
 
 const classesFromScope = (scope: string): string => {
   const classes = [];
@@ -25,33 +25,17 @@ const classesFromScope = (scope: string): string => {
   return classNames(classes);
 };
 
-const classesFromScopes = (scopes: readonly string[], langScopeName: string): string => {
-  const classes = [];
-  for (const scope of scopes) {
-    if (scope === langScopeName) continue;
-
-    const parts = scope.split('.');
-    let acc = parts.shift()!;
-    classes.push(acc);
-    for (const part of parts) {
-      acc += '-' + part;
-      classes.push(acc);
-    }
-  }
-
-  return classNames(...classes);
-};
-
-const highlightCode = async (content: string, lang: string): Promise<readonly Node[] | null> => {
+const highlightCode = async (content: string, lang: string): Promise<ElementContent[] | null> => {
+  stopOnce();
   const tokenStream = await tokenize(content, lang);
   if (!tokenStream) {
     console.warn(`Language ${lang} not found.`);
     return null;
   }
 
-  const nodes: Node[] = [];
-  let stack: Node[][] = [];
-  let current: Node[] = nodes;
+  const nodes: Element[] = [];
+  let stack: ElementContent[][] = [];
+  let current: ElementContent[] = nodes;
   for (const e of tokenStream) {
     switch (e.type) {
       case 'start': {
@@ -63,13 +47,13 @@ const highlightCode = async (content: string, lang: string): Promise<readonly No
       }
 
       case 'token': {
-        const node = { type: 'text', value: e.text };
+        const node = { type: 'text', value: e.text } as const;
         current.push(node);
         break;
       }
 
       case 'line': {
-        const node = { type: 'text', value: '\n' };
+        const node = { type: 'text', value: '\n' } as const;
         current.push(node);
         break;
       }
@@ -86,7 +70,7 @@ const highlightCode = async (content: string, lang: string): Promise<readonly No
   return nodes;
 };
 
-const getLanguage = (node: Node) => {
+const getLanguage = (node: Element) => {
   const className = (node.properties as any).className || [];
 
   for (const classListItem of className) {
@@ -98,11 +82,10 @@ const getLanguage = (node: Node) => {
   return null;
 };
 
-const visitor = async (node: Node, parents: readonly Parent[]) => {
+const visitor = async (node: Element, parents: readonly Parent[]) => {
   const parent = parents[parents.length - 1];
-  if (!parent || parent.tagName !== 'pre' || node.tagName !== 'code') {
-    return;
-  }
+  if (!isPreTag(parent)) return;
+  if (!isCodeTag(node)) return;
 
   const lang = getLanguage(node);
 
@@ -110,7 +93,11 @@ const visitor = async (node: Node, parents: readonly Parent[]) => {
     return;
   }
 
-  (parent as any).properties.className = classNames((parent as any).properties.className, 'language-' + lang);
+  if (!parent.properties) {
+    parent.properties = {};
+  }
+
+  parent.properties.className = classNames(parent.properties.className, 'language-' + lang);
   const result = await highlightCode(nodeToString(node), lang);
   if (result) {
     node.children = result;
@@ -121,7 +108,7 @@ const CONTINUE = true;
 const SKIP = 'skip';
 const EXIT = false;
 
-type VisitResult = void | Node | readonly Node[] | number | typeof CONTINUE | typeof SKIP | typeof EXIT;
+type VisitResult = void | Element | readonly Element[] | number | typeof CONTINUE | typeof SKIP | typeof EXIT;
 
 const toVisitResult = async (value: VisitResult | Promise<VisitResult>): Promise<any> => {
   const val = await Promise.resolve(value);
@@ -137,14 +124,14 @@ const toVisitResult = async (value: VisitResult | Promise<VisitResult>): Promise
 };
 
 const visit = async (
-  tree: Node,
-  test: string,
-  visitor: (node: Node, parents: readonly Parent[]) => VisitResult | Promise<VisitResult>,
+  tree: Root,
+  visitor: (node: Element, parents: readonly Parent[]) => VisitResult | Promise<VisitResult>,
 ) => {
-  const is = convert(test);
-
   // Visit children in `parent`.
-  const all = async (children: readonly Node[], parents: readonly Parent[]): Promise<any> => {
+  const all = async (
+    children: readonly ElementContent[] | readonly RootContent[],
+    parents: readonly Parent[],
+  ): Promise<any> => {
     let min = -1;
     let step = 1;
     let index = min + step;
@@ -162,11 +149,15 @@ const visit = async (
   };
 
   // Visit a single node.
-  const one = async (node: Node, index: number | undefined, parents: readonly Parent[]): Promise<any> => {
+  const one = async (
+    node: ElementContent | Root | DocType,
+    index: number | undefined,
+    parents: readonly Parent[],
+  ): Promise<any> => {
     let result = [];
     let subresult;
 
-    if (!test || is(node, index, parents[parents.length - 1] || null)) {
+    if (isElement(node, index, parents[parents.length - 1] || null)) {
       result = await toVisitResult(visitor(node, parents));
 
       if (result[0] === EXIT) {
@@ -174,8 +165,8 @@ const visit = async (
       }
     }
 
-    if (node.children && result[0] !== SKIP) {
-      subresult = await toVisitResult(all(node.children as Node[], parents.concat(node as Parent)));
+    if ('children' in node && node.children && result[0] !== SKIP) {
+      subresult = await toVisitResult(all(node.children, parents.concat(node)));
       return subresult[0] === EXIT ? subresult : result;
     }
 
@@ -185,9 +176,19 @@ const visit = async (
   await one(tree, void 0, []);
 };
 
-const highlight: Plugin = () => {
+const stopOnce = () => {
+  if (process.env.NODE_ENV === 'development') {
+    if (!process.env.STOP_ONCE) {
+      process.env.STOP_ONCE = '1';
+      debugger;
+    }
+  }
+};
+
+const highlight: Plugin<[], Root> = () => {
   return async (tree) => {
-    await visit(tree, 'element', visitor);
+    // stopOnce();
+    await visit(tree, visitor);
   };
 };
 

@@ -6,7 +6,7 @@ import '../styles/loader.css';
 
 import { AppProps } from 'next/app';
 import NProgress from 'nprogress';
-import { RootLayout } from '@layout/root';
+import { RootLayout } from '@/layout/root';
 import Router from 'next/router';
 
 export default function App({ Component, pageProps }: AppProps) {

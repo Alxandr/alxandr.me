@@ -1,12 +1,16 @@
 import { Plugin, Transformer } from 'unified';
 
-import visit from 'unist-util-visit';
+import { Text } from 'mdast';
+import { convert } from 'unist-util-is';
+import { visit } from 'unist-util-visit';
+
+const isText = convert<Text>('text');
 
 const extractText: Plugin = () => {
   const transformer: Transformer = (tree, file) => {
     const textNodes: string[] = [];
     // TODO: Ignore code probably
-    visit(tree, 'text', (textNode) => textNodes.push(String(textNode.value)));
+    visit(tree, isText, (textNode: Text) => textNodes.push(String(textNode.value)));
     (file.data as any).text = textNodes.join(' ');
   };
 

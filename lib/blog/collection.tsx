@@ -1,6 +1,6 @@
-import { AbstractPostFile, slugify } from './fs';
 import { PostMeta, ProcessResult, process } from './process';
 
+import { AbstractPostFile } from './fs';
 import { DateTime } from 'luxon';
 import { SeriesMeta } from './series';
 import { TagMeta } from './tags';

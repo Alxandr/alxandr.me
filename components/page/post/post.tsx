@@ -1,20 +1,20 @@
-import { Blog, Post } from '@lib/blog';
+import { Blog, Post } from '@/lib/blog';
 import { PostMeta, SeriesInfo } from './series';
 
 import { DateTime } from 'luxon';
 import { NextSeo } from 'next-seo';
-import { PageLayout } from '@layout/page';
-import { SeriesMeta } from '@lib/blog/series';
-import { Tags } from '@components/tags';
+import { PageLayout } from '@/layout/page';
+import { SeriesMeta } from '@/lib/blog/series';
+import { Tags } from '@/components/tags';
 import _ from 'lodash';
 import styles from './post.module.css';
 
-type TagMeta = {
+export type TagMeta = {
   readonly name: string;
   readonly path: string;
 };
 
-type PostData = {
+export type PostData = {
   readonly title: string;
   readonly date: string;
   readonly path: string;
@@ -25,11 +25,11 @@ type PostData = {
   readonly draft: boolean;
 };
 
-type StaticProps = {
+export type PostStaticProps = {
   post: PostData;
 };
 
-const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
+export const getStaticPostProps = async (post: Post, blog: Blog): Promise<PostStaticProps> => {
   const series = (series: SeriesMeta | null) => {
     if (!series) return null;
     const posts = blog.series.bySlug(series.slug)!;
@@ -58,7 +58,7 @@ const getStaticProps = async (post: Post, blog: Blog): Promise<StaticProps> => {
   };
 };
 
-export const BlogPost = ({ post }: StaticProps) => (
+export const BlogPost = ({ post }: PostStaticProps) => (
   <PageLayout title={[post.title]} description={post.excerpt} canonicalPath={post.path}>
     <NextSeo
       openGraph={{
@@ -93,9 +93,3 @@ export const BlogPost = ({ post }: StaticProps) => (
     </article>
   </PageLayout>
 );
-
-BlogPost.getStaticProps = getStaticProps;
-
-export namespace BlogPost {
-  export type Props = StaticProps;
-}

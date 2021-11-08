@@ -20,7 +20,7 @@ export const findPosts = async (includeDrafts: boolean) => {
     const year = parseInt(segments[1], 10);
     const month = parseInt(segments[2], 10);
     const day = parseInt(segments[3], 10);
-    const date = DateTime.fromObject({ year, month, day, locale: 'en-US' });
+    const date = DateTime.fromObject({ year, month, day }, { locale: 'en-US' });
     if (date.invalidExplanation) throw new Error(`Invalid date: ${date.invalidExplanation}`);
 
     const slug = segments[4];
@@ -52,12 +52,16 @@ export const findPost = async (year: string, month: string, day: string, slug: s
   const expected = path.resolve(postsDirectory, `${year}-${month}-${day}-${slug}.md`);
   try {
     await fs.access(expected, F_OK);
-    const date = DateTime.fromObject({
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
-      day: parseInt(day, 10),
-      locale: 'en-US',
-    });
+    const date = DateTime.fromObject(
+      {
+        year: parseInt(year, 10),
+        month: parseInt(month, 10),
+        day: parseInt(day, 10),
+      },
+      {
+        locale: 'en-US',
+      },
+    );
     return new PostFile(expected, postWebPath(date, slug), date);
   } catch (e) {
     // if (includeDrafts) {

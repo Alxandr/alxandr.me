@@ -11,7 +11,7 @@ import markdown from 'remark-parse';
 import { prune } from './prune';
 import rehype2html from 'rehype-stringify';
 import remark2rehype from 'remark-rehype';
-import unified from 'unified';
+import { unified } from 'unified';
 
 const processor = unified()
   .use(markdown)
@@ -25,7 +25,7 @@ const processor = unified()
 
 export const process = async (text: string) => {
   const result = await processor.process(text);
-  const content = result.contents as string;
+  const content = result.value as string;
   const outputText: string = (result.data as any).text;
   const excerptLong = prune(outputText, 550);
   const excerptShort = prune(outputText, 250);
