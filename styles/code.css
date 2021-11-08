@@ -111,7 +111,9 @@ pre[class*='language-']::after {
 }
 
 pre[class*='language-'] {
-  .meta-embedded,
+  .meta-embedded {
+    color: #000000ff;
+  }
   .source-groovy-embedded {
     color: #000000ff;
   }
@@ -130,10 +132,15 @@ pre[class*='language-'] {
   .constant-language {
     color: #0000ff;
   }
-  .constant-numeric,
-  .entity-name-operator-custom-literal-number,
-  .variable-other-enummember,
-  .keyword-operator-plus-exponent,
+  .constant-numeric {
+    color: #098658;
+  }
+  .variable-other-enummember {
+    color: #0070c1;
+  }
+  .keyword-operator-plus-exponent {
+    color: #098658;
+  }
   .keyword-operator-minus-exponent {
     color: #098658;
   }
@@ -149,14 +156,28 @@ pre[class*='language-'] {
   .entity-other-attribute-name {
     color: #ff0000;
   }
-  .entity-other-attribute-name-class-css,
-  .entity-other-attribute-name-class-mixin-css,
-  .entity-other-attribute-name-id-css,
-  .entity-other-attribute-name-parent-selector-css,
-  .entity-other-attribute-name-pseudo-class-css,
-  .entity-other-attribute-name-pseudo-element-css,
-  .source-css-less entity-other-attribute-name-id,
-  .entity-other-attribute-name-attribute-scss,
+  .entity-other-attribute-name-class-css {
+    color: #800000;
+  }
+  .entity-other-attribute-name-class-mixin-css {
+    color: #800000;
+  }
+  .entity-other-attribute-name-id-css {
+    color: #800000;
+  }
+  .entity-other-attribute-name-parent-selector-css {
+    color: #800000;
+  }
+  .entity-other-attribute-name-pseudo-class-css {
+    color: #800000;
+  }
+  .entity-other-attribute-name-pseudo-element-css {
+    color: #800000;
+  }
+  .source-css-less,
+  .entity-other-attribute-name-id {
+    color: #800000;
+  }
   .entity-other-attribute-name-scss {
     color: #800000;
   }
@@ -186,7 +207,9 @@ pre[class*='language-'] {
   .markup-changed {
     color: #0451a5;
   }
-  .punctuation-definition-quote-begin-markdown,
+  .punctuation-definition-quote-begin-markdown {
+    color: #0451a5;
+  }
   .punctuation-definition-list-begin-markdown {
     color: #0451a5;
   }
@@ -196,7 +219,9 @@ pre[class*='language-'] {
   .punctuation-definition-tag {
     color: #800000;
   }
-  .meta-preprocessor,
+  .meta-preprocessor {
+    color: #0000ff;
+  }
   .entity-name-function-preprocessor {
     color: #0000ff;
   }
@@ -215,57 +240,114 @@ pre[class*='language-'] {
   .storage-type {
     color: #0000ff;
   }
-  .storage-modifier,
+  .storage-modifier {
+    color: #0000ff;
+  }
   .keyword-operator-noexcept {
     color: #0000ff;
   }
-  .string,
-  .entity-name-operator-custom-literal-string,
+  .string {
+    color: #a31515;
+  }
   .meta-embedded-assembly {
     color: #a31515;
   }
-  .string-comment-buffered-block-pug,
-  .string-quoted-pug,
-  .string-interpolated-pug,
-  .string-unquoted-plain-in-yaml,
-  .string-unquoted-plain-out-yaml,
-  .string-unquoted-block-yaml,
-  .string-quoted-single-yaml,
-  .string-quoted-double-xml,
-  .string-quoted-single-xml,
-  .string-unquoted-cdata-xml,
-  .string-quoted-double-html,
-  .string-quoted-single-html,
-  .string-unquoted-html,
-  .string-quoted-single-handlebars,
+  .string-comment-buffered-block-pug {
+    color: #0000ff;
+  }
+  .string-quoted-pug {
+    color: #0000ff;
+  }
+  .string-interpolated-pug {
+    color: #0000ff;
+  }
+  .string-unquoted-plain-in-yaml {
+    color: #0000ff;
+  }
+  .string-unquoted-plain-out-yaml {
+    color: #0000ff;
+  }
+  .string-unquoted-block-yaml {
+    color: #0000ff;
+  }
+  .string-quoted-single-yaml {
+    color: #0000ff;
+  }
+  .string-quoted-double-xml {
+    color: #0000ff;
+  }
+  .string-quoted-single-xml {
+    color: #0000ff;
+  }
+  .string-unquoted-cdata-xml {
+    color: #0000ff;
+  }
+  .string-quoted-double-html {
+    color: #0000ff;
+  }
+  .string-quoted-single-html {
+    color: #0000ff;
+  }
+  .string-unquoted-html {
+    color: #0000ff;
+  }
+  .string-quoted-single-handlebars {
+    color: #0000ff;
+  }
   .string-quoted-double-handlebars {
     color: #0000ff;
   }
   .string-regexp {
     color: #811f3f;
   }
-  .punctuation-definition-template-expression-begin,
-  .punctuation-definition-template-expression-end,
+  .punctuation-definition-template-expression-begin {
+    color: #0000ff;
+  }
+  .punctuation-definition-template-expression-end {
+    color: #0000ff;
+  }
   .punctuation-section-embedded {
     color: #0000ff;
   }
   .meta-template-expression {
     color: #000000;
   }
-  .support-constant-property-value,
-  .support-constant-font-name,
-  .support-constant-media-type,
-  .support-constant-media,
-  .constant-other-color-rgb-value,
-  .constant-other-rgb-value,
+  .support-constant-property-value {
+    color: #0451a5;
+  }
+  .support-constant-font-name {
+    color: #0451a5;
+  }
+  .support-constant-media-type {
+    color: #0451a5;
+  }
+  .support-constant-media {
+    color: #0451a5;
+  }
+  .constant-other-color-rgb-value {
+    color: #0451a5;
+  }
+  .constant-other-rgb-value {
+    color: #0451a5;
+  }
   .support-constant-color {
     color: #0451a5;
   }
-  .support-type-vendored-property-name,
-  .support-type-property-name,
-  .variable-css,
-  .variable-scss,
-  .variable-other-less,
+  .support-type-vendored-property-name {
+    color: #ff0000;
+  }
+  .support-type-property-name {
+    color: #ff0000;
+  }
+  .variable-css {
+    color: #ff0000;
+  }
+  .variable-scss {
+    color: #ff0000;
+  }
+  .variable-other-less {
+    color: #ff0000;
+  }
   .source-coffee-embedded {
     color: #ff0000;
   }
@@ -276,27 +358,47 @@ pre[class*='language-'] {
     color: #0000ff;
   }
   .keyword-control {
-    color: #0000ff;
+    color: #af00db;
   }
   .keyword-operator {
     color: #000000;
   }
-  .keyword-operator-new,
-  .keyword-operator-expression,
-  .keyword-operator-cast,
-  .keyword-operator-sizeof,
-  .keyword-operator-alignof,
-  .keyword-operator-typeid,
-  .keyword-operator-alignas,
-  .keyword-operator-instanceof,
-  .keyword-operator-logical-python,
+  .keyword-operator-new {
+    color: #0000ff;
+  }
+  .keyword-operator-expression {
+    color: #0000ff;
+  }
+  .keyword-operator-cast {
+    color: #0000ff;
+  }
+  .keyword-operator-sizeof {
+    color: #0000ff;
+  }
+  .keyword-operator-alignof {
+    color: #0000ff;
+  }
+  .keyword-operator-typeid {
+    color: #0000ff;
+  }
+  .keyword-operator-alignas {
+    color: #0000ff;
+  }
+  .keyword-operator-instanceof {
+    color: #0000ff;
+  }
+  .keyword-operator-logical-python {
+    color: #0000ff;
+  }
   .keyword-operator-wordlike {
     color: #0000ff;
   }
   .keyword-other-unit {
     color: #098658;
   }
-  .punctuation-section-embedded-begin-php,
+  .punctuation-section-embedded-begin-php {
+    color: #800000;
+  }
   .punctuation-section-embedded-end-php {
     color: #800000;
   }
@@ -306,12 +408,238 @@ pre[class*='language-'] {
   .constant-sha-git-rebase {
     color: #098658;
   }
-  .storage-modifier-import-java,
-  .variable-language-wildcard-java,
+  .storage-modifier-import-java {
+    color: #000000;
+  }
+  .variable-language-wildcard-java {
+    color: #000000;
+  }
   .storage-modifier-package-java {
     color: #000000;
   }
   .variable-language {
     color: #0000ff;
+  }
+  .entity-name-function {
+    color: #795e26;
+  }
+  .support-function {
+    color: #795e26;
+  }
+  .support-constant-handlebars {
+    color: #795e26;
+  }
+  .source-powershell,
+  .variable-other-member {
+    color: #795e26;
+  }
+  .entity-name-operator-custom-literal {
+    color: #795e26;
+  }
+  .meta-return-type {
+    color: #267f99;
+  }
+  .support-class {
+    color: #267f99;
+  }
+  .support-type {
+    color: #267f99;
+  }
+  .entity-name-type {
+    color: #267f99;
+  }
+  .entity-name-namespace {
+    color: #267f99;
+  }
+  .entity-other-attribute {
+    color: #267f99;
+  }
+  .entity-name-scope-resolution {
+    color: #267f99;
+  }
+  .entity-name-class {
+    color: #267f99;
+  }
+  .storage-type-numeric-go {
+    color: #267f99;
+  }
+  .storage-type-byte-go {
+    color: #267f99;
+  }
+  .storage-type-boolean-go {
+    color: #267f99;
+  }
+  .storage-type-string-go {
+    color: #267f99;
+  }
+  .storage-type-uintptr-go {
+    color: #267f99;
+  }
+  .storage-type-error-go {
+    color: #267f99;
+  }
+  .storage-type-rune-go {
+    color: #267f99;
+  }
+  .storage-type-cs {
+    color: #267f99;
+  }
+  .storage-type-generic-cs {
+    color: #267f99;
+  }
+  .storage-type-modifier-cs {
+    color: #267f99;
+  }
+  .storage-type-variable-cs {
+    color: #267f99;
+  }
+  .storage-type-annotation-java {
+    color: #267f99;
+  }
+  .storage-type-generic-java {
+    color: #267f99;
+  }
+  .storage-type-java {
+    color: #267f99;
+  }
+  .storage-type-object-array-java {
+    color: #267f99;
+  }
+  .storage-type-primitive-array-java {
+    color: #267f99;
+  }
+  .storage-type-primitive-java {
+    color: #267f99;
+  }
+  .storage-type-token-java {
+    color: #267f99;
+  }
+  .storage-type-groovy {
+    color: #267f99;
+  }
+  .storage-type-annotation-groovy {
+    color: #267f99;
+  }
+  .storage-type-parameters-groovy {
+    color: #267f99;
+  }
+  .storage-type-generic-groovy {
+    color: #267f99;
+  }
+  .storage-type-object-array-groovy {
+    color: #267f99;
+  }
+  .storage-type-primitive-array-groovy {
+    color: #267f99;
+  }
+  .storage-type-primitive-groovy {
+    color: #267f99;
+  }
+  .meta-type-cast-expr {
+    color: #267f99;
+  }
+  .meta-type-new-expr {
+    color: #267f99;
+  }
+  .support-constant-math {
+    color: #267f99;
+  }
+  .support-constant-dom {
+    color: #267f99;
+  }
+  .support-constant-json {
+    color: #267f99;
+  }
+  .entity-other-inherited-class {
+    color: #267f99;
+  }
+  .source-cpp,
+  .keyword-operator-new {
+    color: #af00db;
+  }
+  .source-cpp,
+  .keyword-operator-delete {
+    color: #af00db;
+  }
+  .keyword-other-using {
+    color: #af00db;
+  }
+  .keyword-other-operator {
+    color: #af00db;
+  }
+  .entity-name-operator {
+    color: #af00db;
+  }
+  .variable {
+    color: #001080;
+  }
+  .meta-definition-variable-name {
+    color: #001080;
+  }
+  .support-variable {
+    color: #001080;
+  }
+  .entity-name-variable {
+    color: #001080;
+  }
+  .constant-other-placeholder {
+    color: #001080;
+  }
+  .variable-other-constant {
+    color: #0070c1;
+  }
+  .meta-object-literal-key {
+    color: #001080;
+  }
+  .punctuation-definition-group-regexp {
+    color: #d16969;
+  }
+  .punctuation-definition-group-assertion-regexp {
+    color: #d16969;
+  }
+  .punctuation-definition-character-class-regexp {
+    color: #d16969;
+  }
+  .punctuation-character-set-begin-regexp {
+    color: #d16969;
+  }
+  .punctuation-character-set-end-regexp {
+    color: #d16969;
+  }
+  .keyword-operator-negation-regexp {
+    color: #d16969;
+  }
+  .support-other-parenthesis-regexp {
+    color: #d16969;
+  }
+  .constant-character-character-class-regexp {
+    color: #811f3f;
+  }
+  .constant-other-character-class-set-regexp {
+    color: #811f3f;
+  }
+  .constant-other-character-class-regexp {
+    color: #811f3f;
+  }
+  .constant-character-set-regexp {
+    color: #811f3f;
+  }
+  .keyword-operator-quantifier-regexp {
+    color: #000000;
+  }
+  .keyword-operator-or-regexp {
+    color: #ee0000;
+  }
+  .keyword-control-anchor-regexp {
+    color: #ee0000;
+  }
+  .constant-character {
+    color: #0000ff;
+  }
+  .constant-character-escape {
+    color: #ee0000;
+  }
+  .entity-name-label {
+    color: #000000;
   }
 }

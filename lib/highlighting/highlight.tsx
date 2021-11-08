@@ -4,13 +4,13 @@ import { Plugin } from 'unified';
 import _ from 'lodash';
 import classNames from 'classnames';
 import { convert } from 'unist-util-is';
-import h from 'hastscript';
-import nodeToString from 'hast-util-to-string';
+import { h } from 'hastscript';
+import { toString as nodeToString } from 'hast-util-to-string';
 import { tokenize } from '@yolodev/highlight';
 
-const lines = (content: string): Iterable<string> => {
-  return content.split('\n').map((l) => l.trimEnd());
-};
+const isElement = convert<Element>('element');
+const isPreTag = convert<Element>({ type: 'element', tagName: 'pre' });
+const isCodeTag = convert<Element>({ type: 'element', tagName: 'code' });
 
 const classesFromScope = (scope: string): string => {
   const classes = [];
@@ -25,24 +25,8 @@ const classesFromScope = (scope: string): string => {
   return classNames(classes);
 };
 
-const classesFromScopes = (scopes: readonly string[], langScopeName: string): string => {
-  const classes = [];
-  for (const scope of scopes) {
-    if (scope === langScopeName) continue;
-
-    const parts = scope.split('.');
-    let acc = parts.shift()!;
-    classes.push(acc);
-    for (const part of parts) {
-      acc += '-' + part;
-      classes.push(acc);
-    }
-  }
-
-  return classNames(...classes);
-};
-
 const highlightCode = async (content: string, lang: string): Promise<ElementContent[] | null> => {
+  stopOnce();
   const tokenStream = await tokenize(content, lang);
   if (!tokenStream) {
     console.warn(`Language ${lang} not found.`);
@@ -101,7 +85,7 @@ const getLanguage = (node: Element) => {
 const visitor = async (node: Element, parents: readonly Parent[]) => {
   const parent = parents[parents.length - 1];
   if (!isPreTag(parent)) return;
-  if (!isCodeTag(parent)) return;
+  if (!isCodeTag(node)) return;
 
   const lang = getLanguage(node);
 
@@ -138,10 +122,6 @@ const toVisitResult = async (value: VisitResult | Promise<VisitResult>): Promise
 
   return [val];
 };
-
-const isElement = convert<Element>('element');
-const isPreTag = convert<Element>({ type: 'element', tagName: 'pre' });
-const isCodeTag = convert<Element>({ type: 'element', tagName: 'code' });
 
 const visit = async (
   tree: Root,
@@ -196,8 +176,18 @@ const visit = async (
   await one(tree, void 0, []);
 };
 
+const stopOnce = () => {
+  if (process.env.NODE_ENV === 'development') {
+    if (!process.env.STOP_ONCE) {
+      process.env.STOP_ONCE = '1';
+      debugger;
+    }
+  }
+};
+
 const highlight: Plugin<[], Root> = () => {
   return async (tree) => {
+    // stopOnce();
     await visit(tree, visitor);
   };
 };

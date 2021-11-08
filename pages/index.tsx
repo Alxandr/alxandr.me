@@ -6,7 +6,6 @@ import { getBlog } from '@/lib/blog';
 
 export const getStaticProps: GetStaticProps<PostListStaticProps> = async () => {
   try {
-    debugger;
     const blog = await getBlog({
       includeDrafts: process.env.INCLUDE_DRAFTS === 'true',
     });
