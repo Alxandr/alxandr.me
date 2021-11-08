@@ -1,2 +1,12 @@
 prose:
   rooturl: posts
+  metadata:
+    posts:
+      - name: title
+        field:
+          element: text
+          label: Title
+      - name: date
+        field:
+          element: hidden
+          value: CURRENT_DATETIME
