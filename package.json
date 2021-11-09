@@ -46,7 +46,7 @@
     "@types/lodash": "4.14.176",
     "@types/luxon": "2.0.6",
     "@types/mkdirp": "1.0.2",
-    "@types/node": "16.11.6",
+    "@types/node": "16.11.7",
     "@types/nprogress": "0.2.0",
     "@types/react": "17.0.34",
     "eslint": "7.32.0",
