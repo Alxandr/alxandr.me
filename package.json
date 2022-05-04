@@ -48,7 +48,7 @@
     "@types/mkdirp": "1.0.2",
     "@types/node": "16.11.33",
     "@types/nprogress": "0.2.0",
-    "@types/react": "18.0.6",
+    "@types/react": "18.0.8",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.6",
     "mkdirp": "1.0.4",
