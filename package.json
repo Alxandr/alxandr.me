@@ -22,7 +22,7 @@
     "hast-util-is-element": "2.1.2",
     "hast-util-to-string": "2.0.0",
     "hastscript": "7.0.2",
-    "lodash": "4.17.21",
+    "lodash": "4.18.1",
     "luxon": "3.0.1",
     "netlify-cms-oauth-provider-node": "2.0.0",
     "next": "12.2.4",
