@@ -50,7 +50,7 @@
     "@types/nprogress": "0.2.0",
     "@types/react": "18.0.15",
     "eslint": "8.20.0",
-    "eslint-config-next": "12.2.3",
+    "eslint-config-next": "12.3.7",
     "mkdirp": "1.0.4",
     "node-ts": "5.1.2",
     "postcss-flexbugs-fixes": "5.0.2",
